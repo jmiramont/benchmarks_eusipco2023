@@ -1,0 +1,4 @@
+task : 'denoising'
+# task : 'component_denoising'
+# task : 'inst_frequency'
+
