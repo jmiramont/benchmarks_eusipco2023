@@ -61,6 +61,7 @@ end
 
 % Return reconstructed signal.
 xr = real(reconstruct_func(tfr .* mask_total, L, M));
+% xr = sum(x_hat,2).';
 
 % Return the individual components.
 if return_comps

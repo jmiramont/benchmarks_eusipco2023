@@ -73,8 +73,8 @@ end
 [mask,instf] = pseudoBay(tfr, Ncomp, M, L, div, beta, alpha, ds, Pnei, ifplot, detect, PneiMask);
 
 % Generate a combined mask of all components.
-mask_total = sum(mask,3);
-mask_total(mask_total~=0) = 1;
+% mask_total = sum(mask,3);
+% mask_total(mask_total~=0) = 1;
 
 % Recover components and signal
 x_hat = zeros(N,Ncomp);
@@ -86,7 +86,8 @@ for c = 1:Ncomp
 end
 
 % Return reconstructed signal.
-xr = real(reconstruct_func(tfr .* mask_total, L, M));
+% xr = real(reconstruct_func(tfr .* mask_total, L, M));
+xr = sum(x_hat,2).';
 
 if return_comps
     xr = x_hat.';

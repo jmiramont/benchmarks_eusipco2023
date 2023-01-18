@@ -40,21 +40,24 @@ F = F_mat(:,200);                          % truncate to data size
 Spect = abs(tfr(1:M/2,:)).^2;
 [tf,~] = estim_FRI(Spect,Ncomp,F,M0,Method);
 
-if return_comps
-    % Get the mask and invert the tfr
-    [ mask ] = compMask(tf,Pnei,M/2,0);
+% Get the mask and invert the tfr
+[ mask ] = compMask(tf,Pnei,M/2,0);
+mask(mask~=0)=1;
 
-    % Inversion of the masked STFT.
-    for c = 1:Ncomp
-        x_hat(:,c) = real(rectfrgab(tfr .* mask(:,:,c), L, M));
-        %     [xr,~] = tfristft(tfr .* mask(:,:,c),1:N,w,0);
-    end
+% Inversion of the masked STFT.
+for c = 1:Ncomp
+    x_hat(:,c) = real(rectfrgab(tfr .* mask(:,:,c), L, M));
+    %     [xr,~] = tfristft(tfr .* mask(:,:,c),1:N,w,0);
+end
+
+if return_comps
     xr = x_hat.';
 else
     [ mask ] = compMask(tf,Pnei,M/2,1);
     mask(mask~=0)=1;
     % imagesc(mask)
     xr = real(rectfrgab(tfr .* mask, L, M));
+    % xr = sum(x_hat,2).'/Ncomp;
 end
 
 if return_freq

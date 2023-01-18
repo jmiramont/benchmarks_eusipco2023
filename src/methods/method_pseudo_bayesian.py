@@ -57,17 +57,17 @@ class NewMethod(MethodTemplate):
         if self.task == 'component_denoising':            
             return (([], False, [], [], [], [], [], [], [], [], True),  # without SST
                     ([], True,  [], [], [], [], [], [], [], [], True),   # with SST
-                    ([], True,  [], [], [], 1,  [], [], [], [], True),   # with SST - KL div
+                    # ([], True,  [], [], [], 1,  [], [], [], [], True),   # with SST - KL div
                     ) # Return components
 
         if self.task == 'inst_frequency':            
             return (([], False, [], [], [], [], [], [], [], [], [], True),  # w/o SST
                     ([], True,  [], [], [], [], [], [], [], [], [], True),   # with SST
-                    ([], True,  [], [], [], 1,  [], [], [], [], [], True),   # with SST - KL div
+                    # ([], True,  [], [], [], 1,  [], [], [], [], [], True),   # with SST - KL div
                     )  # Return inst. freq.            
 
         if self.task == 'denoising':
             return (([], False, [], [], [], [], [], [], [], []),  # without SST
                     ([], True,  [], [], [], [], [], [], [], []),   # with SST
-                    ([], True,  [], [], [], 1, [], [], [], []),   # with SST - KL div
+                    # ([], True,  [], [], [], 1, [], [], [], []),   # with SST - KL div
                     ) # Return components    
