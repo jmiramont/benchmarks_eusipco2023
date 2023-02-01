@@ -16,5 +16,6 @@ cum_P = cumsum(P,2);
 z = rand(N,1);
 A=(z*ones(1,D)<cum_P);
 ind=D-sum(A,2)+1;
+ind=min(max(ind,1),D);
 Y=X(ind);
 Y=Y(:);

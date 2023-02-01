@@ -20,7 +20,8 @@ F_mat(:,1) = val;
 for i = 1:(M/2)-1
     F_mat(:,i+1) = [F_mat(end,i);F_mat(1:end-1,i)];
 end
-F_mat = F_mat((M/4)+1:((3*M)/4),:); % Truncation to the same lenght than the data
+% F_mat = F_mat((M/4)+1:((3*M)/4),:); % Truncation to the same lenght than the data
+F_mat = F_mat((M/4):((3*M)/4)-1,:); % Truncation to the same lenght than the data
 F_mat = F_mat./sum(F_mat);% Normalization
 
 

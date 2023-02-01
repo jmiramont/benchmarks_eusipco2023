@@ -9,69 +9,87 @@ end
 N = length(x);
 
 %% Define the default parameters -------------------------------------------
-if nargin<3 || isempty(M)
+if ~exist('M', 'var') || isempty(M)
     M       = N;       %% nombre de bins frequentiels
 end
 
-if nargin<4 || isempty(L)
+if ~exist('L', 'var') || isempty(L)
     L       = 20;        %% taille de la fenetre d'analyse en samples
 end
 
-if nargin<5 || isempty(c)
+if ~exist('c', 'var') || isempty(c)
     c=1e-4; % TV regularization parameter
 end
 
-if nargin<6 || isempty(cl)
-    cl=1e-2; % Laplacian spatial prior reg hyperparameter
-end
-
-if nargin<7 || isempty(step_Nx)
-    step_Nx = 1; % Depth grid subsampling
-end
-
-if nargin<8 || isempty(stepg)
-    stepg = 1e-4; % Gradient step for the M-step
-end
-
-if nargin<9 || isempty(seuil)
-    seuil = 1e-7;
-end
+% if ~exist('cl', 'var')
+%     cl=1e-2; % Laplacian spatial prior reg hyperparameter
+% end
+% if ~exist('step_Nx', 'var')
+%     step_Nx = 1; % Depth grid subsampling
+% end
+% 
+% if ~exist('seuil', 'var')
+%     seuil = 1e-7;
+% end
 
 % Return components.
-if nargin<10 || isempty(return_comps)
+if ~exist('return_comps', 'var') || isempty(return_comps)
     return_comps = false;
 end
 
-%% Apply EM method and get the masks --------------------------------------
-x_hat = zeros(N,Ncomp);
-[tfr,stfr]  = tfrsgab2(x, M, L);
-Y = abs(tfr(1:M/2,:)).^2;
-% [ y_hat, mask ] = EM_estim_multi(tfr, L, Ncomp, seuil, c, cl, step_Nx, 0);
-
-Ns = 1;
-[Fct]=comp_Fc(M,L);                  %% Data distribution
-Fct = repmat(Fct,[1,1,Ns]);
-ifplot = 0;  %%debug
+ifplot = 0;
+% Parameter for sequential MMAP estimation
+step_r = 30; % removal window size
+step_v = 1;  % neighborhood search size
 
 %% Prior choice
 % reg_mu='None';
-% reg_mu='Lap';
-reg_mu='TV';
+reg_mu='Lap';
+%reg_mu='TV';
 
+%%zero-padding
+zp = 0; %round(3*L); %%3 sigma thumb rule 
+z = zeros(zp,1);
+z0 = zp+1;
+z1 = z0+N-1;
+
+%% Apply EM method and get the masks --------------------------------------
+x_hat = zeros(N+2*zp,Ncomp);
+
+M2 = floor(M/2);
+[tfr]  = tfrgab2([z;x;z], M, L);
+Spect = abs(tfr(1:M2,:)).^2;
+
+
+Ns = 1;
+[Fct]=comp_Fc(M,L)+eps; %% Data distribution
+[W_out,P,tf]=Mod_Estim_W_EM_multi((Spect.^2)',Fct,Ncomp,1,reg_mu,c,step_r,step_v,ifplot,1);
+
+
+
+delta_m = 14;
 %% EM algorithm
 for c = 1:Ncomp
-    % [a_out,T_out]=EM_ranging(Y',Fc,Ncomp,c,si,step_Nx,stepg,nb_label);
-    [W_out,P,ind0]=Mod_Estim_W_EM(Y',Fct,Ns,step_Nx,reg_mu,c,cl,ifplot);
 
-    xx = zeros(size(Y));
-    xx(P.'> seuil) = 1;
+    xx = zeros(size(Spect));
+    
+    for n = 1:N
+        m0 = max(1,tf(n,c)-delta_m);
+        m1 = min(tf(n,c)+delta_m, M2);
+        
+        xx(m0:m1,n) = 1; %W_out(n);
+    end
+    
     mask = [xx;xx(end:-1:1,:)];
     
-    Y(P.'> seuil) = 0;   %% remove component
-
+    %% debug
+%      figure;
+%      imagesc(abs(tfr) .* mask)
+%      pause
+    
     x_hat(:,c) = real(rectfrgab(tfr .* mask, L, M));
 end
-
+x_hat = x_hat(z0:z1,:);
 % Generate a combined mask of all components and invert the masked STFT.
 % mask_total = sum(mask,3);
 % mask_total(mask_total~=0) = 1;

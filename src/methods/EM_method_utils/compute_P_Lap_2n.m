@@ -1,4 +1,4 @@
-function [P,Mu_out]=compute_P_Lap_2n(plik0,Mu,c,cl,reg_mu,N_samp)
+function [P,Mu_out]=compute_P_Lap_2n(plik0,Mu,c,reg_mu,N_samp)
 
 % Estimate the posterior distribution using samples
 % 
@@ -37,7 +37,7 @@ for t=1:N_samp
         elseif strcmp(reg_mu,'Lap')
 %             V=[ind0{r}-1,ind0{r}-2,ind0{r}+1,ind0{r}+2];
             V=[ind0{r}-1,ind0{r}+1];
-            pprior=compute_pprior_LapMu(Mu2(:),Nx,V,cl); % la
+            pprior=compute_pprior_LapMu(Mu2(:),Nx,V,c); % la
         end
         ppost=plik+pprior;
         ppost=ppost-max(ppost,[],2)*ones(1,Nx);
@@ -47,7 +47,7 @@ for t=1:N_samp
     end
 end
 % C = ppost(2:end-1,:);
-
+pprior = zeros(size(pprior));
 %% Compute posterior from samples
 Mu_out=Mu2;
 for r=randperm(2)
@@ -58,7 +58,7 @@ for r=randperm(2)
             pprior=compute_pprior_TVMu(Mu2(:),Nx,V,c); % la
         elseif strcmp(reg_mu,'Lap')
             V=[ind0{r}-1,ind0{r}-2,ind0{r}+1,ind0{r}+2];
-            pprior=compute_pprior_LapMu(Mu2(:),Nx,V,cl); % la
+            pprior=compute_pprior_LapMu(Mu2(:),Nx,V,c); % la
         end
     C((ind0{r}),:)=plik+pprior;
 end

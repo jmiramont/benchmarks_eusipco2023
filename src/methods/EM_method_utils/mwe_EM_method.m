@@ -19,20 +19,26 @@ Ncomp = double(Ncomp);
 
 % This vector tells the number of components per time sample 
 % (for SSA, not used in this case).
-vec_nc = double(vec_nc); 
+%vec_nc = double(vec_nc);   %%DF: useless for EM
 
 % Contaminate the signal with real white Gaussian noise.
 noise = randn(N,1);
 SNRin = 5;
 xn = sigmerge(x, noise, SNRin);
 
+N = 500;
+x = x(1:N);
+xn = xn(1:N);
+
 %% Apply EM method with default parameters
 % xr = em_method(x,Ncomp,M,L,c,cl,step_Nx,stepg,seuil,return_comps)
-[xr] = em_method(xn,Ncomp,[],[],[],[],[],[],[],false);
+[X] = em_method(xn,Ncomp,[],[],[],[],[],[],[],true);
 
+xr = sum(X.',2);
 
 %% Compute the QRF for the whole signal.
-qrf = 20*log10(norm(x(100:end-100))/norm(x(100:end-100)-xr(100:end-100).'));
+qrf = RQF(x,xr);
+%qrf = 20*log10(norm(x(100:end-100))/norm(x(100:end-100)-xr(100:end-100).'));
 
 %% Compare recovered signal and the original (denoised) one.
 figure();
@@ -43,7 +49,7 @@ legend()
 
 %% Apply the method again, but recover separate components.
 % xr = em_method(x,Ncomp,M,L,c,cl,step_Nx,stepg,seuil,return_comps)
-X = em_method(xn,Ncomp, [],[],[],[],[],[],[],true);
+%X = em_method(xn,Ncomp, [],[],[],[],[],[],[],true);
 
 %%
 [H L] = roundgauss(2*N); 
