@@ -26,9 +26,6 @@ noise = randn(N,1);
 SNRin = 5;
 xn = sigmerge(x, noise, SNRin);
 
-N = 500;
-x = x(1:N);
-xn = xn(1:N);
 
 %% Apply EM method with default parameters
 % xr = em_method(x,Ncomp,M,L,c,cl,step_Nx,stepg,seuil,return_comps)
