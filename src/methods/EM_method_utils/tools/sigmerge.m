@@ -1,4 +1,4 @@
-function sig=sigmerge(x1,x2,ratio);
+function [sig,h]=sigmerge(x1,x2,ratio);
 %SIGMERGE Add two signals with given energy ratio in dB.
 %	SIG=SIGMERGE(X1,X2,RATIO) adds two signals so that a given
 %	energy ratio expressed in deciBels is satisfied.

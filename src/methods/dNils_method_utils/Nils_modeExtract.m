@@ -1,4 +1,4 @@
-function [ m_SR_Cl,m_SR_MB,m_LCR_Cl, m_LCR_MB, STFT] = Nils_modeExtract(x, M, Nr, sigma_s, clwin )
+function [ m_SR_Cl,m_SR_MB,m_LCR_Cl, m_LCR_MB, IF_MB] = Nils_modeExtract(x, M, Nr, sigma_s, clwin )
 % [ m_SR_Cl,m_SR_MB,m_LCR_Cl, m_LCR_MB, STFT] = Nils_modeExtract(x, M, Nr, sigma_s, clwin )
 %
 %  Nils mode extraction method
@@ -54,14 +54,15 @@ Nfft = M;
 % DF1 = fnval(fnder(Spl(1).spline), t);
 % R1 = 1/(sqrt(2*pi)*sigma_s)*sqrt(1 + sigma_s^4*DF1.^2);
 
-        
 [g, Lh] = create_gaussian_window(N, Nfft, sigma_s);
 [STFT, omega, ~, QM, ~, tau] = FM_operators(x, N, Nfft, g, Lh, sigma_s);
+
+aux = STFT(1:round(Nfft/2)+1,:);
 % QM : chirp rate
 
 %  fprintf('Classic, ');
 %% [8] extraction ridge simple (classique ) [R. Carmona,  W. Hwang,  and B. Torresani,  ?Characterization of signals  by the ridges  of their wavelet  transforms,?IEEETransactions on Signal Processing, vol. 45, no. 10, pp. 2586?2590, Oct 1997]
-   [Cs_simple] = exridge_mult(STFT, Nr, 0, 0, clwin);
+   [Cs_simple] = exridge_mult(aux, Nr, 0, 0, clwin);
    % CS_simple : ridge
         
 %         Spl_Cl = struct('spline', cell(1, Nr));
@@ -75,7 +76,7 @@ Nfft = M;
 
   
 %         fprintf('VFB MB, ');
-        [Cs_VFB_MB] = VFB_MB_exridge_MCS(STFT, sigma_s, QM, 2, Nr);
+        [Cs_VFB_MB] = VFB_MB_exridge_MCS(aux, sigma_s, QM, 2, Nr);
 %         Spl_MB = struct('spline', cell(1, Nr));
 %         for m=1:Nr
 %             Spl_MB(m).spline = spline((0:L-1)/L, (Cs_VFB_MB(m, :) - 1)*L/Nfft);

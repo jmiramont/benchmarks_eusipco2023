@@ -31,13 +31,10 @@ hold on;
 plot(x,'--g','DisplayName','Original signal'); 
 legend()
 
-
-
 %% Apply the method again, but recover separate components.
 X = slide_ssa_method(xn,vec_nc,[],[],[],[],[],true);
 
 [H L] = roundgauss(2*N); 
-
 
 figure();
 for i=1:Ncomp

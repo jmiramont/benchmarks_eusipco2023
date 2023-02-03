@@ -375,7 +375,7 @@ class ResultsInterpreter:
             generated. Defaults to None.
         """
 
-        markers = ['o','d','s','*']
+        markers = ['o','d','s','*','^','v','P','X']
         aux = np.unique(df[hue].to_numpy())
         # print(aux)
         # fig, axis2 = plt.subplots(1,1)

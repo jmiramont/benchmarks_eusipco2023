@@ -1,4 +1,4 @@
-function xr = em_method(x,Ncomp,M,L,c,cl,step_Nx,stepg,seuil,return_comps)
+function xr = em_method(x,Ncomp,M,L,c,return_comps, return_freq)
 % This function is called from the (python based) benchmark.
 % It wraps the EM method and parameters (this of course can be modified).
 %--------------------------------------------------------------------------
@@ -37,6 +37,11 @@ if ~exist('return_comps', 'var') || isempty(return_comps)
     return_comps = false;
 end
 
+% Return components.
+if ~exist('return_freq', 'var') || isempty(return_comps)
+    return_freq = false;
+end
+
 ifplot = 0;
 % Parameter for sequential MMAP estimation
 step_r = 30; % removal window size
@@ -69,6 +74,7 @@ Ns = 1;
 
 delta_m = 14;
 %% EM algorithm
+mask_total = 0;
 for c = 1:Ncomp
 
     xx = zeros(size(Spect));
@@ -81,7 +87,7 @@ for c = 1:Ncomp
     end
     
     mask = [xx;xx(end:-1:1,:)];
-    
+    mask_total = mask_total + mask; % Combine all masks to compare later.
     %% debug
 %      figure;
 %      imagesc(abs(tfr) .* mask)
@@ -90,16 +96,20 @@ for c = 1:Ncomp
     x_hat(:,c) = real(rectfrgab(tfr .* mask, L, M));
 end
 x_hat = x_hat(z0:z1,:);
+
 % Generate a combined mask of all components and invert the masked STFT.
-% mask_total = sum(mask,3);
 % mask_total(mask_total~=0) = 1;
-% mask_total = ones(size(tfr))
 % xr = real(rectfrgab(tfr .* mask_total, L, M));
 
-
-xr = sum(x_hat,2);
+% Sum the components to generate the output signal.
+xr = sum(x_hat,2).';
 
 % If return_comps is True, then return the components insted of the signal.
 if return_comps
     xr = x_hat.';
+end
+
+% If return_freq is True, then return the components' IF
+if return_freq
+    xr = tf.'/M;
 end

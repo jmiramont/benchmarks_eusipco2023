@@ -14,11 +14,22 @@ paths = ['src\methods\EM_method_utils',
 mlint = MatlabInterface('em_method', add2path=paths, matlab_warnings=False) 
 matlab_function = mlint.matlab_function # A python function handler to the method.
 
+# Parameters of the benchmark:
+# Load parameters from configuration file.
+import yaml
+try:
+    with open('src\methods\config_tasks.yaml', "r") as f:
+        config = yaml.load(f, Loader=yaml.FullLoader)
+    task =config['task']
+except:
+    task = 'denoising'
+
+
 class NewMethod(MethodTemplate):
 
     def __init__(self):
         self.id = 'em_method'
-        self.task = 'denoising'
+        self.task = task
         
 
     def method(self, signal, nc=[], *params):
@@ -38,7 +49,15 @@ class NewMethod(MethodTemplate):
         signal_output = matlab_function(signal, nc, *params) # Only positional args.
         return signal_output
         
-    # xr = em_method(x,Ncomp,M,L,c,cl,step_Nx,stepg,seuil,return_comps)    
+    # xr = em_method(x,Ncomp,M,L,c,return_comps, return_freq) 
     # def get_parameters(self):            # Use it to parametrize your method.
     #     return (([], [], [], [], [], [], [], [], True,),)  # # Use this to return all
-        
+    def get_parameters(self):            
+        if self.task == 'component_denoising':            
+            return (([],[],[],[],True,),)  # Return components
+
+        if self.task == 'inst_frequency':            
+            return (([],[],[],[],[],True,),)  # Return inst freq.            
+
+        if self.task == 'denoising':
+            return (((),{}),)        

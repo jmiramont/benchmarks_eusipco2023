@@ -430,7 +430,7 @@ class SignalBank:
 
 # Monocomponent signals --------------------------------------------------------
 
-    def _signal_linear_chirp(self, a=None, b=None, instfreq = False):
+    def _signal_linear_chirp(self, a=None, b=None, phi=0, instfreq = False):
         """Returns a linear chirp, the instantaneous frequency of which is a linear
         function with slope "a" and initial normalized frequency "b".
 
@@ -465,7 +465,7 @@ class SignalBank:
 
         phase = np.cumsum(instf)
 
-        x = np.cos(2*pi*phase)*sg.tukey(Nsub,0.25) 
+        x = np.cos(2*pi*phase+phi)*sg.tukey(Nsub,0.25) 
         signal = np.zeros((N,))
         signal[tmin:tmax] = x
 
@@ -801,8 +801,8 @@ class SignalBank:
         a = self.fmax-self.fmin
         b = self.fmin
         
-        chirp1 = self._signal_linear_chirp(a = -a, b = 0.5 - b)
-        chirp2 = self._signal_linear_chirp(a = a, b = b)
+        chirp1 = self._signal_linear_chirp(a = -a, b = 0.5 - b, phi=pi/5)
+        chirp2 = self._signal_linear_chirp(a = a, b = b, phi=pi/2)
 
         signal = chirp1 + chirp2
 
@@ -811,48 +811,48 @@ class SignalBank:
         
         return signal
 
-    def signal_mc_crossing_chirps_2(self):
-        """Returns a multi component signal with two chirps crossing, i.e. two chirps 
-        whose instantaneous frequency coincide in one point of the time frequency plane.
+    # def signal_mc_crossing_chirps_2(self):
+    #     """Returns a multi component signal with two chirps crossing, i.e. two chirps 
+    #     whose instantaneous frequency coincide in one point of the time frequency plane.
 
-        Returns:
-            numpy.ndarray: Returns a numpy array with the signal.
-        """
+    #     Returns:
+    #         numpy.ndarray: Returns a numpy array with the signal.
+    #     """
 
-        N = self.N
+    #     N = self.N
         
-        a = self.fmax-self.fmin
-        b = self.fmin
+    #     a = self.fmax-self.fmin
+    #     b = self.fmin
         
-        chirp1 = self._signal_linear_chirp(a = -a, b = 0.5 - b)
-        chirp2 = self._signal_linear_chirp(a = a, b = b)
+    #     chirp1 = self._signal_linear_chirp(a = -a, b = 0.5 - b)
+    #     chirp2 = self._signal_linear_chirp(a = a, b = b)
 
-        tmin = self.tmin
-        tmax = N-tmin
-        Nsub = tmax-tmin
-        tsub = np.arange(Nsub)
-        fmax = self.fmax
+    #     tmin = self.tmin
+    #     tmax = N-tmin
+    #     Nsub = tmax-tmin
+    #     tsub = np.arange(Nsub)
+    #     fmax = self.fmax
         
-        signal = np.zeros((N,))
-        instf0 = np.zeros_like(signal)
+    #     signal = np.zeros((N,))
+    #     instf0 = np.zeros_like(signal)
 
-        omega = 1.5
-        f0 = 0.5 - b - a*tsub/Nsub
-        if0 = f0+ 0.02 + 0.02*np.cos(2*pi*omega*tsub/Nsub - pi*omega)
-        if0 = if0[np.where(if0<fmax)]            
-        self.check_inst_freq(if0)
-        phase0 = np.cumsum(if0)
-        x0 = np.zeros_like(signal)
-        x0[tmin:tmin+len(phase0)] = np.cos(2*pi*phase0)*sg.tukey(len(phase0),0.25)
-        instf0[tmin:tmin+len(if0)] = if0
-        chirp1 = Signal(x0, instf=instf0)
+    #     omega = 1.5
+    #     f0 = 0.5 - b - a*tsub/Nsub
+    #     if0 = f0+ 0.02 + 0.02*np.cos(2*pi*omega*tsub/Nsub - pi*omega)
+    #     if0 = if0[np.where(if0<fmax)]            
+    #     self.check_inst_freq(if0)
+    #     phase0 = np.cumsum(if0)
+    #     x0 = np.zeros_like(signal)
+    #     x0[tmin:tmin+len(phase0)] = np.cos(2*pi*phase0)*sg.tukey(len(phase0),0.25)
+    #     instf0[tmin:tmin+len(if0)] = if0
+    #     chirp1 = Signal(x0, instf=instf0)
         
-        signal = chirp1 + chirp2
+    #     signal = chirp1 + chirp2
 
-        if not self.return_signal:
-            return signal.view(np.ndarray)
+    #     if not self.return_signal:
+    #         return signal.view(np.ndarray)
         
-        return signal        
+    #     return signal        
 
     def signal_mc_pure_tones(self, ncomps=5, a1=None, b1=None):
         """Generates a multicomponent signal comprising several pure tones harmonically
@@ -1652,6 +1652,74 @@ class SignalBank:
         if not self.return_signal:
             return signal.view(np.ndarray)
         return signal           
+
+
+    def signal_mc_dumped_cos(self):
+        """Generates a multicomponent signal with different types of components.
+
+        Returns:
+            numpy.ndarray: Returns a numpy array with the signal.
+        """
+
+        N = self.N
+        t = np.arange(N)/N
+        tmin = self.tmin
+        tmax = N-tmin
+        Nsub = tmax-tmin
+        tsub = np.arange(Nsub)
+        fmax = self.fmax
+        
+        signal = np.zeros((N,))
+        instf0 = np.zeros_like(signal)
+        instf1 = np.zeros_like(signal)
+        instf2 = np.zeros_like(signal)
+
+        omega = 5
+        f0 = 0.32 + 0.00*tsub/Nsub
+        if0 = f0 + np.exp(np.log(0.25)*tsub/Nsub) * 0.1*np.cos(2*pi*omega*tsub/Nsub - pi*omega)
+        
+        if1 = self.fmin + 0.1*tsub/Nsub    
+        # if2 = f2+0.02 + 0.02*np.cos(2*pi*omega*tsub/Nsub - pi*omega)    
+        # if0 = if0[np.where(if0<fmax)]    
+        # if1 = if1[np.where(if1<fmax)]    
+        # if2 = if2[np.where(if2<fmax)]    
+        
+        phase0 = np.cumsum(if0)
+        phase1 = np.cumsum(if1)
+        # phase2 = np.cumsum(if2)
+        
+        x0 = np.zeros_like(signal)
+        x1 = np.zeros_like(signal)
+        # x2 = np.zeros_like(signal)
+
+        eps = 1e-6
+        t = np.arange(Nsub)+eps
+        c = 1/Nsub/10
+        prec = 10e-1 # Precision at sample N for the envelope.
+        alfa = -np.log(prec*Nsub/((Nsub-c)**2))/Nsub
+        e = np.exp(-alfa*t)*((t-c)**2/t)
+        e[0] = 0
+        e = e/np.max(np.abs(e))
+
+        x0[tmin:tmin+len(phase0)] = np.cos(2*pi*phase0)*sg.tukey(len(phase0),0.25)
+        x1[tmin:tmin+len(phase1)] = e*np.cos(2*pi*phase1)#*sg.tukey(len(phase1),0.05) 
+        # x2[tmin:tmin+len(phase2)] = np.cos(2*pi*phase2)*sg.tukey(len(phase2),0.25) 
+
+        instf0[tmin:tmin+len(if0)] = if0
+        instf1[tmin:tmin+len(if1)] = if1
+        # instf2[tmin:tmin+len(if2)] = if2
+
+        chirp0 = Signal(x0, instf=instf0)
+        chirp1 = Signal(x1, instf=instf1)
+        # chirp2 = Signal(x2, instf=instf2)
+
+        # signal = x0+x1+x2 
+
+        signal = chirp0+chirp1
+
+        if not self.return_signal:
+            return signal.view(np.ndarray)
+        return signal       
 
 
     # def signal_speech(self, number=6, type='male'):

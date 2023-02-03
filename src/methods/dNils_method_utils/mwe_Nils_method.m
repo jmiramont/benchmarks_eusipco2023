@@ -1,4 +1,4 @@
-clear all
+clear
 close all
 
 %% required paths
@@ -6,40 +6,58 @@ folder = './';
 addpath(folder);
 addpath(['signals_mat']);
 addpath(strcat([folder 'tools']));
-addpath(strcat([folder 'synchrosqueezedSTFT']));
 
 %% Import signal from file
-load McCosPlusTone.mat
+% load McCosPlusTone.mat
 % load McCrossingChirps.mat
-% load McSyntheticMixture2.mat
-% load McOnOff2.mat
+load McSyntheticMixture5.mat
+%load McOnOff2.mat
+
 N = length(x); % The signal has 1024 samples.
 x = x.';
 Ncomp = double(Ncomp);
 
 % This vector tells the number of components per time sample 
 % (for SSA, not used in this case).
-%vec_nc = double(vec_nc);   %%DF: useless for EM
+%vec_nc = double(vec_nc); 
 
 % Contaminate the signal with real white Gaussian noise.
-rng(0);
 noise = randn(N,1);
 SNRin = 30;
 xn = sigmerge(x, noise, SNRin);
 
+%% Apply Nils method with default parameters
+% xr = em_method(x,Ncomp,M,L,c,cl,step_Nx,stepg,seuil,return_comps)
+%[xr] = em_method(xn,Ncomp,[],[],[],[],[],[],[],false);
+M = 1024;
+% [ m_SR_Cl,m_SR_MB,m_LCR_Cl, m_LCR_MB, STFT] = Nils_modeExtract(xn, M, Ncomp);
+% 
+% % for changing the assessed method affect X to the m_SR_Cl, m_SR_MB, m_LCR_Cl or m_LCR_MB
+% % from Nils, the best one should be the spline approach (m_SR_MB or m_LCR_MB)
+% X = real(m_SR_MB);
+% xr = sum(X.',2);
 
-%% Apply EM method with default parameters
-% xr = em_method(x,Ncomp,M,L,c,return_comps, return_freq)
-[X] = em_method(xn,Ncomp,[],[],[],true);
-xr = sum(X.',2);
+xr = nils_method(xn, Ncomp,[],'SR');
 
-% [xr] = em_method(xn,Ncomp,[],[],[],false);
-
-
+% % method 1
+% xr = sum(m_SR_Cl.',2);
+% RQF(x,xr)
+% % method 2
+% xr = sum(m_SR_MB.',2);
+% RQF(x,xr)
+% % method 3
+% xr = sum(m_LCR_Cl.',2);
+% RQF(x,xr)
+% % method 4
+% xr = sum(m_LCR_MB.',2);
+% RQF(x,xr)
 
 %% Compute the QRF for the whole signal.
 qrf = RQF(x,xr);
 %qrf = 20*log10(norm(x(100:end-100))/norm(x(100:end-100)-xr(100:end-100).'));
+
+
+X = nils_method(x, Ncomp, M,[],[],[],true);
 
 %% Compare recovered signal and the original (denoised) one.
 figure();
@@ -47,7 +65,6 @@ plot(xr,'k','DisplayName','Recovered signal');
 hold on; 
 plot(x,'--g','DisplayName','Original signal'); 
 legend()
-
 
 %%
 [H L] = roundgauss(2*N); 
