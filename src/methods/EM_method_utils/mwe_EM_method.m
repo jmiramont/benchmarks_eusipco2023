@@ -9,19 +9,24 @@ addpath(strcat([folder 'tools']));
 addpath(strcat([folder 'synchrosqueezedSTFT']));
 
 %% Import signal from file
-load McCosPlusTone.mat
+% load McCosPlusTone.mat
 % load McCrossingChirps.mat
-% load McSyntheticMixture2.mat
-% load McOnOff2.mat
-N = length(x); % The signal has 1024 samples.
-x = x.';
-Ncomp = double(Ncomp);
+% % load McSyntheticMixture2.mat
+% % load McOnOff2.mat
+% N = length(x); % The signal has 1024 samples.
+% x = x.';
+% Ncomp = double(Ncomp);
 
-% This vector tells the number of components per time sample 
-% (for SSA, not used in this case).
-%vec_nc = double(vec_nc);   %%DF: useless for EM
+%% Define signal x0
+N  = 500;                        %% signal length
+X0(:,1) = 0.8 * fmlin(N,0.41,0.1);
+X0(:,2) = fmlin(N,0.1,0.45);
+x = sum(X0,2);
+x = real(x); % <- Make the signal real.
+Ncomp = size(X0,2);                  %% number of components
 
-% Contaminate the signal with real white Gaussian noise.
+%%
+% Contaminate the signal with real Gaussian white noise.
 rng(0);
 noise = randn(N,1);
 SNRin = 30;
@@ -32,10 +37,6 @@ xn = sigmerge(x, noise, SNRin);
 % xr = em_method(x,Ncomp,M,L,c,return_comps, return_freq)
 [X] = em_method(xn,Ncomp,[],[],[],true);
 xr = sum(X.',2);
-
-% [xr] = em_method(xn,Ncomp,[],[],[],false);
-
-
 
 %% Compute the QRF for the whole signal.
 qrf = RQF(x,xr);
@@ -58,7 +59,7 @@ legend()
 figure();
 for i=1:Ncomp
     subplot(Ncomp+1,2,2*i-1);
-    S = tfrsp(comps(i,:).',1:N,2*N,H);
+    S = tfrsp(real(X0(:,i)),1:N,2*N,H);
     imagesc(S(1:N+1,:));
     title('Original Component: '+string(i));
     
@@ -66,11 +67,10 @@ for i=1:Ncomp
     S = tfrsp(X(i,:).',1:N,2*N,H);
     imagesc(S(1:N+1,:));
     title('Recovered Component: '+string(i));
-    
 end
 
 subplot(Ncomp+1,2,2*Ncomp+1)
-S = tfrsp(sum(comps).',1:N,2*N,H);
+S = tfrsp(sum(real(X0),2),1:N,2*N,H);
 imagesc(S(1:N+1,:));
 title('Sum of Original Components: '+string(i));
 

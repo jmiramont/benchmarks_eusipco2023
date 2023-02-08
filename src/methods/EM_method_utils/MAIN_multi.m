@@ -13,7 +13,7 @@ addpath(strcat([folder 'synchrosqueezedSTFT']));
 M       = 500;       %% Number of frequential bin
 L       = 20;        %% analysis window size (in bin)
 %% Define signal x0
-N     = 500;                        %% signal length
+N     = 1024;                        %% signal length
 % X(:,1)    = (fmconst(N, 0.15));
 % X(:,2)    = (fmconst(N, 0.35));
 X(:,1) = fmlin(N,0.1,0.4);
@@ -59,7 +59,7 @@ tic
 toc
 %% Plot reconstructions
 
-%     figure(1)
-% hold on
-% plot(1:500,tf(:,1),'--')
-%     plot(1:500,tf(:,2),'--')
+    figure(1)
+hold on
+plot(1:1024,tf(:,1),'--')
+    plot(1:1024,tf(:,2),'--')
