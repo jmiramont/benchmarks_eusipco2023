@@ -60,7 +60,7 @@ def order_components(Xest, X, minormax = 'max', metric = corr_comps):
         fun = np.argmin
         factor = 1
 
-    while np.any([k == [] for k in order]):
+    while np.any(np.array([k == [] for k in order], dtype=object)):
         ind = np.unravel_index(fun(values, axis=None), values.shape)
         if (ind[0] not in order) and (order[ind[1]] == []):
             order[ind[1]] = ind[0]

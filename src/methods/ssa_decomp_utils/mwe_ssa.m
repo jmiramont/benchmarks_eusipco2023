@@ -4,7 +4,9 @@ close all
 addpath('signals_mat');
 
 %% Import signal from file (from the SignalBank in python).
-load McCosPlusTone.mat
+% load McCosPlusTone.mat
+% load McParallelChirpsUnbalanced.mat
+load McPureTones.mat
 N = length(x); % The signal has 1024 samples.
 x = x.';
 Ncomp = double(Ncomp);
@@ -18,9 +20,9 @@ SNRin = 30;
 xn = sigmerge(x, noise, SNRin);
 
 
-%% Apply the method: Sliding SSA.
-% [signal_r, Y] = method_ssa_decomp(signal, L, n_components, epsilon)
-[xr, X] = method_ssa_decomp(xn, 251, Ncomp,1e-3);
+%% Apply the method: SSA.
+% [signal_r,Y] = method_ssa_decomp(signal, n_components, L, epsilon, return_comps)
+[xr, X] = method_ssa_decomp(xn,Ncomp,256,1e-2);
 
 %% Compute the QRF
 qrf = 20*log10(norm(x(100:end-100))/norm(x(100:end-100)-xr(100:end-100)));

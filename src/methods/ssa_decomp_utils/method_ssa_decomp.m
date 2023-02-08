@@ -1,4 +1,4 @@
-function signal_r = method_ssa_decomp(signal, n_components, L, epsilon, return_comps)
+function [signal_r,Y] = method_ssa_decomp(signal, n_components, L, epsilon, return_comps)
 %METHOD_SSA_DECOMP Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -7,7 +7,7 @@ L  = 40;  %% embedded dimension SSA parameter
 end
 
 if nargin < 4 || isempty(epsilon)
-epsilon = 5e-3;    %% singular spectrum thresholding parameter (increase for more robustness to noise)
+epsilon = 1e-4;    %% singular spectrum thresholding parameter (increase for more robustness to noise)
 end
 
 if nargin < 5 || isempty(return_comps)

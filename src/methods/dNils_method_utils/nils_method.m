@@ -7,7 +7,7 @@ if nargin < 3 || isempty(M)
 end
 
 if nargin < 4 || isempty(approach)
-    approach  = 'SR'; 
+    approach  = 1; % 1 = 'SR' , 2 = 'LCR'
 end
 
 if nargin < 5 || isempty(sigma_s)
@@ -35,11 +35,11 @@ end
 
 [ m_SR_Cl,m_SR_MB,m_LCR_Cl, m_LCR_MB, IF_MB] = Nils_modeExtract(x, M, Ncomp);
 
-if strcmp(approach,'SR')
+if approach == 1
     X = real(m_SR_MB);
 end
 
-if strcmp(approach,'LCR')
+if approach == 2
     X = real(m_LCR_MB);
 end
 

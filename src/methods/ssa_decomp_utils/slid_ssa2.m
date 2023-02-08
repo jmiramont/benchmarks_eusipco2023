@@ -78,7 +78,7 @@ for i = 1:nb_seg    % for each frame
   
   %% autoSSA, TODO: to replace by a loop which reduces nbc_cur if ssa_decomp fails
   Ytmp = ssa_hc(sx, L, nbc_cur, epsilon); %% apply SSA on current frame signal
-  %Ytmp = ssa_decomp(sx, L, nbc_cur, epsilon);
+%   Ytmp = ssa_decomp(sx, L, nbc_cur, epsilon);
   %Ytmp = DerivSSA_nc(sx, L, nbc_cur);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% debug

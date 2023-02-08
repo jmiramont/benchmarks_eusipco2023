@@ -380,7 +380,7 @@ class ResultsInterpreter:
         # print(aux)
         # fig, axis2 = plt.subplots(1,1)
         
-        plots = [(method_name, markers[np.mod(i,4)]) for i, method_name in enumerate(aux)]
+        plots = [(method_name, markers[np.mod(i,8)]) for i, method_name in enumerate(aux)]
         u_offset = np.linspace(-2,2,len(plots))
         u_offset = np.zeros_like(u_offset)
         for offs_idx, plots_info in enumerate(plots):

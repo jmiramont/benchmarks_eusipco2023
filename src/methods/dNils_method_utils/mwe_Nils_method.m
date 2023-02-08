@@ -4,13 +4,13 @@ close all
 %% required paths
 folder = './';
 addpath(folder);
-addpath(['signals_mat']);
+addpath(['../../../notebooks/signals_mat/']);
 addpath(strcat([folder 'tools']));
 
-%% Import signal from file
-% load McCosPlusTone.mat
-% load McCrossingChirps.mat
-load McSyntheticMixture5.mat
+%% Import signals from file
+% Signals used in the paper:
+load McDumpedCos.mat
+% load McSyntheticMixture5.mat
 %load McOnOff2.mat
 
 N = length(x); % The signal has 1024 samples.
@@ -23,7 +23,7 @@ Ncomp = double(Ncomp);
 
 % Contaminate the signal with real white Gaussian noise.
 noise = randn(N,1);
-SNRin = 30;
+SNRin = 0;
 xn = sigmerge(x, noise, SNRin);
 
 %% Apply Nils method with default parameters
@@ -37,7 +37,7 @@ M = 1024;
 % X = real(m_SR_MB);
 % xr = sum(X.',2);
 
-xr = nils_method(xn, Ncomp,[],'SR');
+xr = nils_method(xn, Ncomp,[],1); % 1 = SR, 2 = LCR
 
 % % method 1
 % xr = sum(m_SR_Cl.',2);

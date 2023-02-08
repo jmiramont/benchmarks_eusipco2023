@@ -335,7 +335,7 @@ def delaunay_triangulation_denoising(signal,
     comps = []
     instf = []
     if return_comps or return_instf:
-        comps = np.array([reconstruct_signal_3(mask_comp, stft, window=g) for mask_comp in masks_of_each_group])
+        comps = np.array([np.real(reconstruct_signal_3(mask_comp, stft, window=g)) for mask_comp in masks_of_each_group])
 
         instf = np.array([get_instf(comp) for comp in comps])
 
@@ -347,7 +347,7 @@ def delaunay_triangulation_denoising(signal,
 
     # Apply the reconstruction formula to the masked STFT to filter the signal.
     # signal_r, t = reconstruct_signal_2(mask, stft_padded, Npad, Nfft)
-    signal_r = reconstruct_signal_3(mask, stft, window=g)
+    signal_r = np.real(reconstruct_signal_3(mask, stft, window=g))
     # Return dictionary if requested, otherwise return the denoised signal.
     if return_dic:
         return {'s_r': signal_r,

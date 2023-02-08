@@ -57,11 +57,17 @@ class NewMethod(MethodTemplate):
 
     def get_parameters(self):            
         if self.task == 'component_denoising':            
-            return (([], [], [], [], [], True,),)  # Return components
+            return (([], [], 1, [], [], True,), # 1 = SR, 2 = LCR
+                    ([], [], 2, [], [], True,)
+                    )  # Return components            
 
         if self.task == 'inst_frequency':            
-            return (([], [], [], [], [], [], True,),)  # Return inst. freq.            
+            return (([], [], 1, [], [], [], True,), # 1 = SR, 2 = LCR
+                    ([], [], 2, [], [], [], True,)
+                    )  # Return inst. freq.            
 
         if self.task == 'denoising':
-            return (((),{}),)     
+            return ((([], [], 1,),{}), # 1 = SR, 2 = LCR
+                    (([], [], 2,),{})
+                    )     
 

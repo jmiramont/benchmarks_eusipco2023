@@ -1702,7 +1702,7 @@ class SignalBank:
         e = e/np.max(np.abs(e))
 
         x0[tmin:tmin+len(phase0)] = np.cos(2*pi*phase0)*sg.tukey(len(phase0),0.25)
-        x1[tmin:tmin+len(phase1)] = e*np.cos(2*pi*phase1)#*sg.tukey(len(phase1),0.05) 
+        x1[tmin:tmin+len(phase1)] = np.cos(2*pi*phase1)*sg.tukey(len(phase1),0.25) 
         # x2[tmin:tmin+len(phase2)] = np.cos(2*pi*phase2)*sg.tukey(len(phase2),0.25) 
 
         instf0[tmin:tmin+len(if0)] = if0

@@ -86,7 +86,7 @@ def get_istft(tfr,window=None,t=None):
     window=window/np.linalg.norm(window)
     tfr=ifft(tfr,axis=0)
 
-    x=np.zeros((tcol,))
+    x=np.zeros((tcol,),dtype=complex)
     for icol in range(0,tcol):
         valuestj=np.arange(np.max([1,icol-N/2,icol-Lh]),np.min([tcol,icol+N/2,icol+Lh])).astype(int)
         for tj in valuestj:
@@ -270,7 +270,7 @@ def reconstruct_signal_2(mask, stft, Npad, Nfft=None, window=None, overlap=None)
     return xr, t
 
 def reconstruct_signal_3(mask, stft, window=None):
-    mask_complete = np.zeros_like(stft, dtype=bool)
+    mask_complete = np.zeros_like(stft,)
     mask_complete[0:mask.shape[0],:] = mask
     mask_complete[mask.shape[0]::,:] = mask[-2:0:-1,:]
     xr = get_istft(stft*mask_complete,window=window,t=np.arange(0,stft.shape[1]))

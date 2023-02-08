@@ -1,12 +1,12 @@
-function xr = slide_ssa_method(x,Ncomp,Nssa,L,delta,size_win,epsilon, return_comps)
+function xr = slide_ssa_method(x,vec_nc,Nssa,L,delta,size_win,epsilon, return_comps)
 N = length(x);
 
 if nargin<3 || isempty(Nssa)
-    Nssa     = 71;
+    Nssa     = 60;
 end
 
 if nargin<4 || isempty(L)
-    L        = 40;   %40
+    L        = 30;   %40
 end
 
 if nargin<5 || isempty(delta)
@@ -28,14 +28,14 @@ end
 
 
 select   = round(Nssa/2);
-ind1     = select;   %select;
+ind1     = select;
 ind2     = ind1+size_win-1;
 
 
 % figure(); plot(Ncomp);
 
 %% Apply the method
-Y1 = slid_ssa2(x, Nssa, delta, Ncomp, ind1, ind2, L, epsilon);
+Y1 = slid_ssa2(x, Nssa, delta, vec_nc, ind1, ind2, L, epsilon);
 xr = sum(Y1,2).';
 
 if return_comps

@@ -323,6 +323,26 @@ test = ["flaky", "ipyparallel", "pre-commit", "pytest (>=7.0)", "pytest-asyncio"
 typing = ["mypy (>=0.990)"]
 
 [[package]]
+name = "ipympl"
+version = "0.9.2"
+description = "Matplotlib Jupyter Extension"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+ipython = "<9"
+ipython-genutils = "*"
+ipywidgets = ">=7.6.0,<9"
+matplotlib = ">=3.4.0,<4"
+numpy = "*"
+pillow = "*"
+traitlets = "<6"
+
+[package.extras]
+docs = ["Sphinx (>=1.5)", "myst-nb", "sphinx-book-theme", "sphinx-copybutton", "sphinx-thebe", "sphinx-togglebutton"]
+
+[[package]]
 name = "ipython"
 version = "8.7.0"
 description = "IPython: Productive Interactive Computing"
@@ -356,6 +376,32 @@ parallel = ["ipyparallel"]
 qtconsole = ["qtconsole"]
 test = ["pytest (<7.1)", "pytest-asyncio", "testpath"]
 test_extra = ["curio", "matplotlib (!=3.2.0)", "nbformat", "numpy (>=1.20)", "pandas", "pytest (<7.1)", "pytest-asyncio", "testpath", "trio"]
+
+[[package]]
+name = "ipython_genutils"
+version = "0.2.0"
+description = "Vestigial utilities from IPython"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
+name = "ipywidgets"
+version = "8.0.4"
+description = "Jupyter interactive widgets"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+ipykernel = ">=4.5.1"
+ipython = ">=6.1.0"
+jupyterlab-widgets = ">=3.0,<4.0"
+traitlets = ">=4.3.1"
+widgetsnbextension = ">=4.0,<5.0"
+
+[package.extras]
+test = ["jsonschema", "pytest (>=3.6.0)", "pytest-cov", "pytz"]
 
 [[package]]
 name = "jedi"
@@ -448,6 +494,14 @@ traitlets = ">=5.3"
 [package.extras]
 docs = ["myst-parser", "sphinxcontrib-github-alt", "traitlets"]
 test = ["ipykernel", "pre-commit", "pytest", "pytest-cov", "pytest-timeout"]
+
+[[package]]
+name = "jupyterlab-widgets"
+version = "3.0.5"
+description = "Jupyter interactive widgets for JupyterLab"
+category = "main"
+optional = false
+python-versions = ">=3.7"
 
 [[package]]
 name = "kiwisolver"
@@ -1316,6 +1370,14 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "widgetsnbextension"
+version = "4.0.5"
+description = "Jupyter interactive widgets for Jupyter Notebook"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[[package]]
 name = "zipp"
 version = "3.11.0"
 description = "Backport of pathlib-compatible object wrapper for zip files"
@@ -1336,7 +1398,7 @@ rtools = ["rpy2", "spatstat-interface"]
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.9,<3.10"
-content-hash = "79eb6b3dfc416594df624e8b861f4847952e11265cccf1316dba889a3e7eefb0"
+content-hash = "7689860d402af60443050595bb58f4fa2317b2c2e4a580fbef294b41ffb99c94"
 
 [metadata.files]
 alabaster = [
@@ -1599,9 +1661,21 @@ ipykernel = [
     {file = "ipykernel-6.19.2-py3-none-any.whl", hash = "sha256:1374a55c57ca7a7286c3d8b15799cd76e1a2381b6b1fea99c494b955988926b6"},
     {file = "ipykernel-6.19.2.tar.gz", hash = "sha256:1ab68d3d3654196266baa93990055413e167263ffbe4cfe834f871bcd3d3506d"},
 ]
+ipympl = [
+    {file = "ipympl-0.9.2-py2.py3-none-any.whl", hash = "sha256:655604f0bf6d264cf599766950a5b26e292d107cc23e197503647e75417981cc"},
+    {file = "ipympl-0.9.2.tar.gz", hash = "sha256:c865c1992248f9966fbe4b6006239ae2959b00fc7e887ae32b0bd389808f0f8b"},
+]
 ipython = [
     {file = "ipython-8.7.0-py3-none-any.whl", hash = "sha256:352042ddcb019f7c04e48171b4dd78e4c4bb67bf97030d170e154aac42b656d9"},
     {file = "ipython-8.7.0.tar.gz", hash = "sha256:882899fe78d5417a0aa07f995db298fa28b58faeba2112d2e3a4c95fe14bb738"},
+]
+ipython_genutils = [
+    {file = "ipython_genutils-0.2.0-py2.py3-none-any.whl", hash = "sha256:72dd37233799e619666c9f639a9da83c34013a73e8bbc79a7a6348d93c61fab8"},
+    {file = "ipython_genutils-0.2.0.tar.gz", hash = "sha256:eb2e116e75ecef9d4d228fdc66af54269afa26ab4463042e33785b887c628ba8"},
+]
+ipywidgets = [
+    {file = "ipywidgets-8.0.4-py3-none-any.whl", hash = "sha256:ebb195e743b16c3947fe8827190fb87b4d00979c0fbf685afe4d2c4927059fa1"},
+    {file = "ipywidgets-8.0.4.tar.gz", hash = "sha256:c0005a77a47d77889cafed892b58e33b4a2a96712154404c6548ec22272811ea"},
 ]
 jedi = [
     {file = "jedi-0.18.2-py2.py3-none-any.whl", hash = "sha256:203c1fd9d969ab8f2119ec0a3342e0b49910045abe6af0a3ae83a5764d54639e"},
@@ -1626,6 +1700,10 @@ jupyter-client = [
 jupyter-core = [
     {file = "jupyter_core-5.1.0-py3-none-any.whl", hash = "sha256:f5740d99606958544396914b08e67b668f45e7eff99ab47a7f4bcead419c02f4"},
     {file = "jupyter_core-5.1.0.tar.gz", hash = "sha256:a5ae7c09c55c0b26f692ec69323ba2b62e8d7295354d20f6cd57b749de4a05bf"},
+]
+jupyterlab-widgets = [
+    {file = "jupyterlab_widgets-3.0.5-py3-none-any.whl", hash = "sha256:a04a42e50231b355b7087e16a818f541e53589f7647144ea0344c4bf16f300e5"},
+    {file = "jupyterlab_widgets-3.0.5.tar.gz", hash = "sha256:eeaecdeaf6c03afc960ddae201ced88d5979b4ca9c3891bcb8f6631af705f5ef"},
 ]
 kiwisolver = [
     {file = "kiwisolver-1.4.4-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:2f5e60fabb7343a836360c4f0919b8cd0d6dbf08ad2ca6b9cf90bf0c76a3c4f6"},
@@ -2412,6 +2490,10 @@ urllib3 = [
 wcwidth = [
     {file = "wcwidth-0.2.5-py2.py3-none-any.whl", hash = "sha256:beb4802a9cebb9144e99086eff703a642a13d6a0052920003a230f3294bbe784"},
     {file = "wcwidth-0.2.5.tar.gz", hash = "sha256:c4d647b99872929fdb7bdcaa4fbe7f01413ed3d98077df798530e5b04f116c83"},
+]
+widgetsnbextension = [
+    {file = "widgetsnbextension-4.0.5-py3-none-any.whl", hash = "sha256:eaaaf434fb9b08bd197b2a14ffe45ddb5ac3897593d43c69287091e5f3147bf7"},
+    {file = "widgetsnbextension-4.0.5.tar.gz", hash = "sha256:003f716d930d385be3fd9de42dd9bf008e30053f73bddde235d14fbeaeff19af"},
 ]
 zipp = [
     {file = "zipp-3.11.0-py3-none-any.whl", hash = "sha256:83a28fcb75844b5c0cdaf5aa4003c2d728c77e05f5aeabe8e95e56727005fbaa"},
