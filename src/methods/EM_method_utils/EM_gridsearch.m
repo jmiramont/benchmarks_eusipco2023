@@ -55,7 +55,7 @@ best_v = [-1 -1];
 best_qrf = -inf;
 
 for i = 1:nval1
-    parfor j = 1:nval2
+    for j = 1:nval2
       step_r = round(v1_rng(i));
       step_v = round(v2_rng(j));
       %% Apply EM method with default parameters
