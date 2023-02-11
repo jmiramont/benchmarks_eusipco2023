@@ -272,11 +272,11 @@ class SignalBank:
         def signal_mc_multi_linear(self, ncomps=5):
             Generates a multicomponent signal with multiple linear chirps.
    
-        def signal_tone_dumped(self):
-            Generates a dumped tone whose normalized frequency is 0.25.
+        def signal_tone_damped(self):
+            Generates a damped tone whose normalized frequency is 0.25.
     
         def signal_tone_sharp_attack(self):
-            Generates a dumped tone that is modulated with a rectangular window.
+            Generates a damped tone that is modulated with a rectangular window.
 
         def signal_cos_chirp(self, omega=1.5, a1=1, f0=0.25, a2=0.125, checkinstf=True):
             Generates a cosenoidal chirp, the instantenous frequency of which is given 
@@ -480,8 +480,8 @@ class SignalBank:
         else:
             return signal
       
-    def _signal_tone_dumped(self):
-        """Generates a dumped tone whose normalized frequency is 0.25.
+    def _signal_tone_damped(self):
+        """Generates a damped tone whose normalized frequency is 0.25.
 
         Returns:
             numpy.ndarray: Returns a numpy array with the signal.
@@ -499,14 +499,14 @@ class SignalBank:
         return e*chirp
 
     def _signal_tone_sharp_attack(self):
-        """Generates a dumped tone that is modulated with a rectangular window.
+        """Generates a damped tone that is modulated with a rectangular window.
 
         Returns:
             numpy.ndarray: Returns a numpy array with the signal.
         """
 
         N = self.N
-        dumpcos = self.signal_tone_dumped()
+        dumpcos = self.signal_tone_damped()
         indmax = np.argmax(dumpcos)
         dumpcos[0:indmax] = 0
         return dumpcos    
@@ -621,9 +621,8 @@ class SignalBank:
             return signal.view(np.ndarray)
         return signal
 
-
-    def signal_tone_dumped(self):
-        """Generates a dumped tone whose normalized frequency is 0.25.
+    def signal_tone_damped(self):
+        """Generates a damped tone whose normalized frequency is 0.25.
 
         Returns:
             numpy.ndarray: Returns a numpy array with the signal.
@@ -646,14 +645,14 @@ class SignalBank:
         return signal
 
     def signal_tone_sharp_attack(self):
-        """Generates a dumped tone that is modulated with a rectangular window.
+        """Generates a damped tone that is modulated with a rectangular window.
 
         Returns:
             numpy.ndarray: Returns a numpy array with the signal.
         """
 
         N = self.N
-        signal = self.signal_tone_dumped()
+        signal = self.signal_tone_damped()
         indmax = np.argmax(signal)
         signal[0:indmax] = 0
 
@@ -1653,8 +1652,7 @@ class SignalBank:
             return signal.view(np.ndarray)
         return signal           
 
-
-    def signal_mc_dumped_cos(self):
+    def signal_mc_damped_cos(self):
         """Generates a multicomponent signal with different types of components.
 
         Returns:

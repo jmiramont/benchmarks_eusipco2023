@@ -19,7 +19,7 @@ addpath(strcat([folder 'synchrosqueezedSTFT']));
 
 %% Define signal x0
 N  = 500;                        %% signal length
-X0(:,1) = 0.8 * fmlin(N,0.41,0.1);
+X0(:,1) = 0.2 * fmlin(N,0.41,0.1);
 X0(:,2) = fmlin(N,0.1,0.45);
 x = sum(X0,2);
 x = real(x); % <- Make the signal real.
@@ -27,9 +27,9 @@ Ncomp = size(X0,2);                  %% number of components
 
 %%
 % Contaminate the signal with real Gaussian white noise.
-rng(0);
+% rng(0);
 noise = randn(N,1);
-SNRin = 30;
+SNRin = 20;
 xn = sigmerge(x, noise, SNRin);
 
 

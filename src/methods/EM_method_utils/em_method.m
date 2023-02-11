@@ -1,4 +1,4 @@
-function xr = em_method(x,Ncomp,M,L,c,return_comps, return_freq)
+function [xr, mask_total] = em_method(x,Ncomp,M,L,c,return_comps, return_freq)
 % This function is called from the (python based) benchmark.
 % It wraps the EM method and parameters (this of course can be modified).
 %--------------------------------------------------------------------------
@@ -98,7 +98,7 @@ end
 x_hat = x_hat(z0:z1,:);
 
 % Generate a combined mask of all components and invert the masked STFT.
-% mask_total(mask_total~=0) = 1;
+mask_total(mask_total~=0) = 1;
 % xr = real(rectfrgab(tfr .* mask_total, L, M));
 
 % Sum the components to generate the output signal.

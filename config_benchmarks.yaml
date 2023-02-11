@@ -5,8 +5,8 @@ parallelize: True
 verbosity: 4  
 using_signals: [ #'LinearChirp','CosChirp',]      # Single-component signals
 #                #'ToneSharpAttack', ToneDumped,  # Dumped and Sharps attacks
-                'McDumpedCos',
-                'McCrossingChirps',             # Crossing-components  
+                'McDampedCos',
+                # 'McCrossingChirps',             # Crossing-components  
                 # 'McMultiLinear', 
                 # 'McMultiLinear2',             # Multi-Component signals  
 #                 'McMultiCos2',                # Multi-Component Non-Harmonic    

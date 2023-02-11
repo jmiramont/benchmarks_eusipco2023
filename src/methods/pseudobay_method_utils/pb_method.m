@@ -1,4 +1,4 @@
-function xr = pb_method(x, Ncomp, use_sst, ds, beta, alpha, div, Pnei, PneiMask, M, L,return_comps, return_instf)
+function [xr,mask_total] = pb_method(x, Ncomp, use_sst, ds, beta, alpha, div, Pnei, PneiMask, M, L,return_comps, return_instf)
 % This is the function that is called from the Python-based benchmark.
 
 
@@ -31,11 +31,11 @@ if nargin<7 || isempty(div)
 end
 
 if nargin<8 || isempty(Pnei)
-    Pnei = 35;
+    Pnei = 15;
 end
 
 if nargin<9 || isempty(PneiMask)
-    PneiMask = 10;
+    PneiMask = 15;
 end
 
 if nargin<10 || isempty(M)
@@ -73,8 +73,8 @@ end
 [mask,instf] = pseudoBay(tfr, Ncomp, M, L, div, beta, alpha, ds, Pnei, ifplot, detect, PneiMask);
 
 % Generate a combined mask of all components.
-% mask_total = sum(mask,3);
-% mask_total(mask_total~=0) = 1;
+mask_total = sum(mask,3);
+mask_total(mask_total~=0) = 1;
 
 % Recover components and signal
 x_hat = zeros(N,Ncomp);

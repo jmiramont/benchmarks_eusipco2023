@@ -386,16 +386,25 @@ class NewMethod(MethodTemplate):
         # self.cs = ComputeStatistics()
 
     def method(self, signal, *args, **kwargs):
-        nc = signal.total_comps
-        signal_output = delaunay_triangulation_denoising(signal, ngroups=nc, *args,**kwargs)    
+        if "ngroups" not in kwargs.keys():
+            nc = signal.total_comps
+            kwargs['ngroups']=signal.total_comps
+
+        signal_output = delaunay_triangulation_denoising(signal, *args,**kwargs)    
         return signal_output
 
     def get_parameters(self):            # Use it to parametrize your method.
         if self.task == 'component_denoising':
-            return [{'LB':1.75, 'grouping': True, 'return_comps':True,},]
+            return [{'LB':1.45, 'grouping': True, 'return_comps':True,},
+                    {'LB':1.75, 'grouping': True, 'return_comps':True,},
+                    ]
 
         if self.task == 'inst_frequency':
-            return [{'LB':1.75, 'grouping': True, 'return_instf':True,},]
+            return [{'LB':1.45, 'grouping': True, 'return_instf':True,},
+                    {'LB':1.75, 'grouping': True, 'return_instf':True,},
+                    ]
             
         if self.task == 'denoising':
-            return [{'LB':1.75, 'grouping': True,},] 
+            return [{'LB':1.45, 'grouping': True,},
+                    {'LB':1.75, 'grouping': True,},
+                    ] 

@@ -32,7 +32,7 @@ class NewMethod(MethodTemplate):
         self.task = task
         
 
-    def method(self, signal, nc=[], *params):
+    def method(self, signal, nc=[], *params, **kwargs):
         """_summary_
 
         Args:
@@ -46,7 +46,7 @@ class NewMethod(MethodTemplate):
             nc = signal.total_comps
 
         # Matlab function: xr = 
-        signal_output = matlab_function(signal, nc, *params) # Only positional args.
+        signal_output = matlab_function(signal, nc, *params, **kwargs) # Only positional args.
         return signal_output
         
     # xr = em_method(x,Ncomp,M,L,c,return_comps, return_freq) 

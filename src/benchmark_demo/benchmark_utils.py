@@ -68,7 +68,7 @@ class MatlabInterface():
             self.eng.eval("addpath(genpath('"+path+"'))")
         # sys.path.insert(0, os.path.abspath('../src/methods/'))
 
-    def matlab_function(self, signal, *params):
+    def matlab_function(self, signal, *params,**kwargs):
         """_summary_
 
         Args:
@@ -80,7 +80,7 @@ class MatlabInterface():
         all_params = list((signal.copy(),*params))
         params = self.pre_parameters(*all_params)
         fun_handler = getattr(self.eng, self.matlab_function_name)
-        outputs = fun_handler(*params)
+        outputs = fun_handler(*params,**kwargs)
         if len(outputs)==1:
             outputs = outputs[0].toarray()
         else:

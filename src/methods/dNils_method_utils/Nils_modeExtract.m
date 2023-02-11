@@ -72,7 +72,7 @@ aux = STFT(1:round(Nfft/2)+1,:);
 %         [m_SR_Cl, m_LCR_Cl, IF_Cl] = R1_MR_and_LCR_spl(STFT, Spl_Cl, g, Lh, sigma_s, Nr, Nfft, L);
 
 %% reconstruction (m_SR_Cl : simple reconstruction [8], Linear Chirp Reconstruct  (LCR)
-   [m_SR_Cl, m_LCR_Cl, IF_Cl] = R1_MR_and_LCR_grid(STFT, QM, Cs_simple, g, Lh, sigma_s, Nr, Nfft, N);
+   [m_SR_Cl, m_LCR_Cl, IF_Cl, STFT_Cl] = R1_MR_and_LCR_grid(STFT, QM, Cs_simple, g, Lh, sigma_s, Nr, Nfft, N);
 
   
 %         fprintf('VFB MB, ');
@@ -82,7 +82,7 @@ aux = STFT(1:round(Nfft/2)+1,:);
 %             Spl_MB(m).spline = spline((0:L-1)/L, (Cs_VFB_MB(m, :) - 1)*L/Nfft);
 %         end
 %         [m_SR_MB, m_LCR_MB, IF_MB] = R1_MR_and_LCR_spl(STFT, Spl_MB, g, Lh, sigma_s, Nr, Nfft, L);
-        [m_SR_MB, m_LCR_MB, IF_MB] = R1_MR_and_LCR_grid(STFT, QM, Cs_VFB_MB, g, Lh, sigma_s, Nr, Nfft, N);
+        [m_SR_MB, m_LCR_MB, IF_MB, STFT_LCR] = R1_MR_and_LCR_grid(STFT, QM, Cs_VFB_MB, g, Lh, sigma_s, Nr, Nfft, N);
 
 
 
