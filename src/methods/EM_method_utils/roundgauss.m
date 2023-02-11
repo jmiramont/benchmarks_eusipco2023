@@ -20,7 +20,7 @@ function [w, L]=roundgauss(n,k);
 
 if nargin==1,
  k=1e-3;
-end;
+end
 
 L=sqrt(n);
 l=floor(sqrt(-n*log(k)/pi))+1;
