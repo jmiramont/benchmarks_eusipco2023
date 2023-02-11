@@ -1,6 +1,22 @@
 clear
 close all
 
+%%% script for searching the best set of parameters
+%step_r / step-v
+
+nval1 = 100;
+nval2 = 100;
+
+v1_min = 1;
+v1_max = 100;
+
+v2_min = 1;
+v2_max = 100;
+
+
+rqf_res = ones(nval1,nval2) * nan;
+
+
 %% required paths
 folder = './';
 addpath(folder);
@@ -32,21 +48,40 @@ noise = randn(N,1);
 SNRin = 30;
 xn = sigmerge(x, noise, SNRin);
 
+v1_rng = linspace(v1_min,v1_max, nval1);
+v2_rng = linspace(v2_min,v2_max, nval2);
 
-%% Apply EM method with default parameters
-%best RQF:
-%step_r= 27; step_v=58
+best_v = [-1 -1];
+best_qrf = -inf;
 
-%% best mask
-step_r = 20;
-step_v = 60;
-% xr = em_method(x,Ncomp,M,L,c,return_comps, return_freq)
-[X] = em_method(xn,Ncomp,[],[],[],step_r, step_v, true);
-xr = sum(X.',2);
+for i = 1:nval1
+    parfor j = 1:nval2
+      step_r = round(v1_rng(i));
+      step_v = round(v2_rng(j));
+      %% Apply EM method with default parameters
+      %20 / 60 works
+      [X] = em_method(xn,Ncomp,[],[],[],step_r, step_v, true);
+      xr  = sum(X.',2);
 
-%% Compute the QRF for the whole signal.
-qrf = RQF(x,xr)
-%qrf = 20*log10(norm(x(100:end-100))/norm(x(100:end-100)-xr(100:end-100).'));
+      %% Compute the QRF for the whole signal.
+      qrf = RQF(x,xr);
+      %qrf = 20*log10(norm(x(100:end-100))/norm(x(100:end-100)-xr(100:end-100).'));
+      
+      if qrf > best_qrf
+        best_v = [step_r step_v]
+        best_qrf = qrf
+        
+        rqf_res(i,j) = qrf;
+      end
+    end
+end
+
+figure
+imagesc(v1_rng,v2_rng, rqf_res)
+hold on
+plot(best_v(1),best_v(2), 'kx')
+xlabel('step_r')
+ylabel('step_v')
 
 %% Compare recovered signal and the original (denoised) one.
 figure();
