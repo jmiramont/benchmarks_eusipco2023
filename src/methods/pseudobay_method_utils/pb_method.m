@@ -11,7 +11,7 @@ if nargin<2 || isempty(Ncomp)
 end
 
 if nargin<3 || isempty(use_sst)
-    use_sst = false;
+    use_sst = false; % <- This uses SST and changes the reconstruction fun.
 end
 
 if nargin<4 || isempty(ds)
@@ -85,9 +85,9 @@ for c = 1:Ncomp
     %     [xr,~] = tfristft(tfr .* mask(:,:,c),1:N,w,0);
 end
 
-% Return reconstructed signal.
-% xr = real(reconstruct_func(tfr .* mask_total, L, M));
-xr = sum(x_hat,2).';
+% Return reconstructed signal by summing the components.
+xr = real(reconstruct_func(tfr .* mask_total, L, M));
+% xr = sum(x_hat,2).';
 
 if return_comps
     xr = x_hat.';

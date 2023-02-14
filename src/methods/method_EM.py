@@ -49,15 +49,16 @@ class NewMethod(MethodTemplate):
         signal_output = matlab_function(signal, nc, *params, **kwargs) # Only positional args.
         return signal_output
         
-    # xr = em_method(x,Ncomp,M,L,c,return_comps, return_freq) 
+    # xr = em_method(x,Ncomp,M,L,c,return_comps, return_freq)
+    # xr = em_method(x,Ncomp,M,L,c, step_r, step_v, return_comps, return_freq) 
     # def get_parameters(self):            # Use it to parametrize your method.
     #     return (([], [], [], [], [], [], [], [], True,),)  # # Use this to return all
     def get_parameters(self):            
         if self.task == 'component_denoising':            
-            return (([],[],[],[],True,),)  # Return components
+            return (([],[],[],[],[],[],True,),)  # Return components
 
         if self.task == 'inst_frequency':            
-            return (([],[],[],[],[],True,),)  # Return inst freq.            
+            return (([],[],[],[],[],[],[],True,),)  # Return inst freq.            
 
         if self.task == 'denoising':
             return (((),{}),)        

@@ -21,6 +21,14 @@ if ~exist('c', 'var') || isempty(c)
     c=1e-4; % TV regularization parameter
 end
 
+if ~exist('step_r', 'var') || isempty(step_r)
+    step_r=34; %27; 
+end
+
+if ~exist('step_v', 'var') || isempty(step_v)
+    step_v=89; %58
+end
+
 % if ~exist('cl', 'var')
 %     cl=1e-2; % Laplacian spatial prior reg hyperparameter
 % end

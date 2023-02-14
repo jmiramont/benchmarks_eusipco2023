@@ -780,10 +780,8 @@ class SignalBank:
 
         signal = chirp1+chirp2b+chirp2a+chirp3
 
-        #TODO: The total number of comps should be generated automatically.
         if not self.return_signal:
             signal = signal.view(np.ndarray)
-            # signal.total_ncomps = 4
 
         return signal
 
@@ -800,8 +798,8 @@ class SignalBank:
         a = self.fmax-self.fmin
         b = self.fmin
         
-        chirp1 = self._signal_linear_chirp(a = -a, b = 0.5 - b, phi=pi/5)
-        chirp2 = self._signal_linear_chirp(a = a, b = b, phi=pi/2)
+        chirp1 = 0.8*self._signal_linear_chirp(a = -0.31, b = 0.41, phi=0)
+        chirp2 = self._signal_linear_chirp(a = 0.35, b = 0.1, phi=0)
 
         signal = chirp1 + chirp2
 

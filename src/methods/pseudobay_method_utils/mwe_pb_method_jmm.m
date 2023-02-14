@@ -13,8 +13,7 @@ addpath(strcat([folder 'PseudoBay']));
 
 
 %% Import signal from file (from the SignalBank in python).
-load McSyntheticMixture5.mat
-% load McSyntheticMixture3.mat
+load McDampedCos.mat
 N = length(x); % The signal has 1024 samples.
 x = x.';
 Ncomp = double(Ncomp);

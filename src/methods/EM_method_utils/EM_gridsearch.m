@@ -1,11 +1,11 @@
-clear
+clear all
 close all
 
 %%% script for searching the best set of parameters
 %step_r / step-v
 
-nval1 = 100;
-nval2 = 100;
+nval1 = 10;
+nval2 = 10;
 
 v1_min = 1;
 v1_max = 100;
@@ -25,27 +25,28 @@ addpath(strcat([folder 'tools']));
 addpath(strcat([folder 'synchrosqueezedSTFT']));
 
 %% Import signal from file
-% load McCosPlusTone.mat
-% load McCrossingChirps.mat
-% % load McSyntheticMixture2.mat
-% % load McOnOff2.mat
-% N = length(x); % The signal has 1024 samples.
-% x = x.';
-% Ncomp = double(Ncomp);
+load McCrossingChirps.mat
+% load McSyntheticMixture5.mat
+% load McDampedCos.mat
+
+N = length(x); % The signal has 1024 samples.
+x = x.';
+Ncomp = double(Ncomp);
+X0 = comps.';
 
 %% Define signal x0
-N  = 500;                        %% signal length
-X0(:,1) = 0.8 * fmlin(N,0.41,0.1);
-X0(:,2) = fmlin(N,0.1,0.45);
-x = sum(X0,2);
-x = real(x); % <- Make the signal real.
-Ncomp = size(X0,2);                  %% number of components
+% N  = 500;                        %% signal length
+% X0(:,1) = 0.8 * fmlin(N,0.41,0.1);
+% X0(:,2) = fmlin(N,0.1,0.45);
+% x = sum(X0,2);
+% x = real(x); % <- Make the signal real.
+% Ncomp = size(X0,2);                  %% number of components
 
 %%
 % Contaminate the signal with real Gaussian white noise.
 rng(0);
 noise = randn(N,1);
-SNRin = 30;
+SNRin = 20;
 xn = sigmerge(x, noise, SNRin);
 
 v1_rng = linspace(v1_min,v1_max, nval1);
@@ -53,9 +54,9 @@ v2_rng = linspace(v2_min,v2_max, nval2);
 
 best_v = [-1 -1];
 best_qrf = -inf;
-
+qrf = zeros([nval1,nval2]);
 for i = 1:nval1
-    for j = 1:nval2
+    parfor j = 1:nval2
       step_r = round(v1_rng(i));
       step_v = round(v2_rng(j));
       %% Apply EM method with default parameters
@@ -64,15 +65,15 @@ for i = 1:nval1
       xr  = sum(X.',2);
 
       %% Compute the QRF for the whole signal.
-      qrf = RQF(x,xr);
-      %qrf = 20*log10(norm(x(100:end-100))/norm(x(100:end-100)-xr(100:end-100).'));
+      qrf(i,j) = RQF(x,xr);
+      qrf(i,j)
       
-      if qrf > best_qrf
-        best_v = [step_r step_v]
-        best_qrf = qrf
-        
-        rqf_res(i,j) = qrf;
-      end
+%       if qrf > best_qrf
+%         best_v = [step_r step_v]
+%         best_qrf = qrf
+%         
+%         rqf_res(i,j) = qrf;
+%       end
     end
 end
 

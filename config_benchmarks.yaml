@@ -1,12 +1,12 @@
 N: 1024
-SNRin: [-20,-15,-10,-5,0,5,10,15,20]
-repetitions: 30
+SNRin: [-20,-10,0,10,20] #[-20,-15,-10,-5,0,5,10,15,20]
+repetitions: 50
 parallelize: True
 verbosity: 4  
 using_signals: [ #'LinearChirp','CosChirp',]      # Single-component signals
 #                #'ToneSharpAttack', ToneDumped,  # Dumped and Sharps attacks
                 'McDampedCos',
-                # 'McCrossingChirps',             # Crossing-components  
+                'McCrossingChirps',             # Crossing-components  
                 # 'McMultiLinear', 
                 # 'McMultiLinear2',             # Multi-Component signals  
 #                 'McMultiCos2',                # Multi-Component Non-Harmonic    

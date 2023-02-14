@@ -27,8 +27,6 @@ SNRin = 0;
 xn = sigmerge(x, noise, SNRin);
 
 %% Apply Nils method with default parameters
-% xr = em_method(x,Ncomp,M,L,c,cl,step_Nx,stepg,seuil,return_comps)
-%[xr] = em_method(xn,Ncomp,[],[],[],[],[],[],[],false);
 M = 1024;
 % [ m_SR_Cl,m_SR_MB,m_LCR_Cl, m_LCR_MB, STFT] = Nils_modeExtract(xn, M, Ncomp);
 % 
