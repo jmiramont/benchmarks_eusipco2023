@@ -40,13 +40,13 @@ end
 
 Nfft = M;
 
-% Nr = 1;
-% smooth_p = 1 - 10^(-4);
-% t = (0:N-1)'/N;
+Nr = 1;
+smooth_p = 1 - 10^(-4);
+t = (0:N-1)'/N;
 %
-% [g, Lh] = create_gaussian_window(N, Nfft, sigma_LC);
-% [STFT, omega, ~, QM, ~, tau] = FM_operators(x, L, Nfft, g, Lh, sigma_LC);
-% [Spl_LC, ~] = R1_RRP_RD(STFT, QM, omega, tau, L, Nfft, Nr, sigma_LC, smooth_p);
+[g, Lh] = create_gaussian_window(N, Nfft, sigma_LC);
+[STFT, omega, ~, QM, ~, tau] = FM_operators(x, L, Nfft, g, Lh, sigma_LC);
+[Spl_LC, ~] = R1_RRP_RD(STFT, QM, omega, tau, L, Nfft, Nr, sigma_LC, smooth_p);
 %
 % Spl = Spl_LC;
 % sigma_s = sigma_LC;

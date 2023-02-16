@@ -4,12 +4,12 @@ close all
 %% required paths
 folder = './';
 addpath(folder);
-addpath(['../../../notebooks/signals_mat/']);
+addpath('../signals_mat/');
 addpath(strcat([folder 'tools']));
 
 %% Import signals from file
 % Signals used in the paper:
-load McDumpedCos.mat
+load McDampedCos.mat
 % load McSyntheticMixture5.mat
 %load McOnOff2.mat
 
