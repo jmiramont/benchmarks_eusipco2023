@@ -26,8 +26,8 @@ addpath(strcat([folder 'synchrosqueezedSTFT']));
 
 %% Import signal from file
 % load McCrossingChirps.mat
-% load McSyntheticMixture5.mat
-load McDampedCos.mat
+load McSyntheticMixture5.mat
+% load McDampedCos.mat
 
 N = length(x); % The signal has 1024 samples.
 x = x.';
@@ -46,7 +46,7 @@ X0 = comps.';
 % Contaminate the signal with real Gaussian white noise.
 rng(0);
 noise = randn(N,1);
-SNRin = 20;
+SNRin = -20;
 xn = sigmerge(x, noise, SNRin);
 
 v1_rng = linspace(v1_min,v1_max, nval1);

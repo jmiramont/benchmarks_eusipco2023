@@ -1,4 +1,4 @@
-function xr = em_method(x,Ncomp,M,L,c, step_r, step_v, return_comps, return_freq)
+function [xr,mask_total] = em_method(x,Ncomp,M,L,c, step_r, step_v, return_comps, return_freq)
 % This function is called from the (python based) benchmark.
 % It wraps the EM method and parameters (this of course can be modified).
 %--------------------------------------------------------------------------
