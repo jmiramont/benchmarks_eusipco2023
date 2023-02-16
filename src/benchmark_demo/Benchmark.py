@@ -6,6 +6,7 @@ import numbers
 import pickle
 import multiprocessing
 import copy
+import time
 
 # from typing import Callable, is_typeddict
 # import json
@@ -337,11 +338,12 @@ class Benchmark:
         return compFuncs[task]    
 
 
-    def inner_loop(self, benchmark_parameters):
+    def inner_loop(self, benchmark_parameters,timer=False):
         """Main loop of the Benchmark.
 
         Args:
             benchmark_parameters (tuple): Tuple or list with the parameters of the benchmark.
+            timer (bool): If true, measures the time of execution.
 
         Returns:
             narray: Return a numpy array, the shape of which depends on the selected task.
@@ -363,9 +365,11 @@ class Benchmark:
 
 
         try:
-            args, kwargs = params    
+            args, kwargs = params
+            tstart = time.time()   
             method_output = self.methods[method](noisy_signal,*args,**kwargs)
-            
+            elapsed = time.time() - tstart
+
         except BaseException as err:
             print(f"Unexpected error {err=}, {type(err)=} in method {method}. Watch out for NaN values.")
             
@@ -381,7 +385,7 @@ class Benchmark:
         #! Rewrite this part.
         # self.check_methods_output(method_output,noisy_signals) # Just checking if the output its valid.   
         
-        return method_output
+        return method_output, elapsed
 
     def run_test(self):
         """Run the benchmark.
@@ -395,7 +399,8 @@ class Benchmark:
         # Dictionaries for the results. This helps to express the results later using a DataFrame.
         if self.results is None:
             self.results = dict()
-            
+            self.elapsed_time = dict()
+
             # Create dictionary tree:
             for signal_id in self.signal_ids: 
                 SNR_dic = dict()
@@ -405,10 +410,13 @@ class Benchmark:
                         params_dic = dict()
                         # for params in self.parameters[method]:
                         #     params_dic[str(params)] = 'Deep' 
-                        method_dic[method] = params_dic                     
+                        method_dic[method] = params_dic
+                        self.elapsed_time[method]  = params_dic                     
+
                     SNR_dic[SNR] = method_dic
                 self.results[signal_id] = SNR_dic        
-
+        
+        
 
         # This run all the experiments and save the results in nested dictionaries.
         for signal_id in self.signal_ids:
@@ -461,13 +469,17 @@ class Benchmark:
 
                 # ---------------------- Serial loop -----------------------------------
                 k = 0  # This is used to get the parallel results if it's necessary.
+                
                 for method in self.methods:
+                    
                     if self.this_method_is_new[method]:
                         params_dic = dict()
                         if self.verbosity >= 3:
                             print('--- Method: '+ method)                    
 
                         for p, params in enumerate(self.parameters[method]):
+                            elapsed = []
+
                             if self.verbosity >= 4:
                                 print('---- Parameters Combination: '+ str(p)) 
                             
@@ -491,23 +503,31 @@ class Benchmark:
                                                          
                             for idx, noisy_signal in enumerate(noisy_signals):
                                 if self.parallel_flag:  # Get results from parallel...
-                                    tmp = parallel_results[k]
+                                    tmp, extime = parallel_results[k]
                                     method_output[idx] = tmp
+                                    # Save but DON'T TRUST the exec. time in parallel.
+                                    elapsed.append(extime) 
                                     k += 1     
                                 else:                   # Or from serial computation.
-                                    tmp = self.inner_loop([method,
+                                    
+                                    tmp, extime = self.inner_loop([method,
                                                         (args, kwargs), 
                                                         idx])        
                                     method_output[idx] = tmp
-                            
+                                    elapsed.append(extime)
+                                    
                             # Either way, results are saved in a nested dictionary.
                             result =  self.objectiveFunction(self.base_signal, 
                                                             method_output,
                                                             **extrargs)
                         
                             # params_dic['Params'+str(p)] = result
-                            params_dic[str(params)] = result
-                            
+                            params_dic[str(params)] = result                        
+                            self.elapsed_time[method][str(params)] = elapsed
+
+                            if self.verbosity > 4:
+                                print('Elapsed:{}'.format(np.mean(elapsed)))                    
+
                         self.results[signal_id][SNR][method] = params_dic
                         self.methods_and_params_dic[method] = [key for key in params_dic] 
 
@@ -727,7 +747,19 @@ def get_args_and_kwargs(params):
 
         return args, kwargs
 
+# Some neat solution I saw online for time measuring.
+# # TODO
+# class Timer(object):
+#     def __init__(self, name=None):
+#         self.name = name
 
+#     def __enter__(self):
+#         self.tstart = time.time()
+
+#     def __exit__(self, type, value, traceback):
+#         if self.name:
+#             print('[%s]' % self.name,)
+#         print('Elapsed: %s' % (time.time() - self.tstart))
 
 # ! Deprecated
 # 

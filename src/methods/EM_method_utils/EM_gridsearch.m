@@ -4,8 +4,8 @@ close all
 %%% script for searching the best set of parameters
 %step_r / step-v
 
-nval1 = 10;
-nval2 = 10;
+nval1 = 20;
+nval2 = 20;
 
 v1_min = 1;
 v1_max = 100;
@@ -25,9 +25,9 @@ addpath(strcat([folder 'tools']));
 addpath(strcat([folder 'synchrosqueezedSTFT']));
 
 %% Import signal from file
-load McCrossingChirps.mat
+% load McCrossingChirps.mat
 % load McSyntheticMixture5.mat
-% load McDampedCos.mat
+load McDampedCos.mat
 
 N = length(x); % The signal has 1024 samples.
 x = x.';

@@ -14,6 +14,8 @@ addpath(strcat([folder 'PseudoBay']));
 
 %% Import signal from file (from the SignalBank in python).
 load McDampedCos.mat
+% load McCrossingChirps.mat
+% load McSyntheticMixture5.mat
 N = length(x); % The signal has 1024 samples.
 x = x.';
 Ncomp = double(Ncomp);
@@ -23,12 +25,14 @@ vec_nc = double(vec_nc);
 
 % Contaminate the signal with real white Gaussian noise.
 noise = randn(N,1);
-SNRin = 20;
+SNRin = 0;
 xn = sigmerge(x, noise, SNRin);
 
-%% Apply the method: Sliding SSA.
-% xr = slide_ssa_method(x,Ncomp,Nssa,L,delta,size_win,epsilon)
-xr = pb_method(xn,Ncomp,[],[],[],[],[],[],[],[],[],false);
+%% Apply the method
+% [xr,mask_total] = pb_method(x, Ncomp, use_sst, ds, beta, alpha, div, Pnei, PneiMask, M, L,return_comps, return_instf)
+beta=0.4;
+alpha=0.4;
+[xr, mask_total] = pb_method(xn,Ncomp,true,[],[],[],[],[],[],[],[]);
 
 %% Compute the QRF
 qrf = 20*log10(norm(x(100:end-100))/norm(x(100:end-100)-xr(100:end-100).'));
@@ -42,7 +46,7 @@ legend()
 
 
 %% Apply the method again, but recover separate components.
-X = pb_method(xn,Ncomp,[],[],[],[],[],[],[],[],[],true);
+X = pb_method(xn,Ncomp,true,[],[],[],[],[],[],[],[],true);
 
 [H L] = roundgauss(2*N); 
 

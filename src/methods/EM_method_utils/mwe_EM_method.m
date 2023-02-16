@@ -10,7 +10,7 @@ addpath(strcat([folder 'synchrosqueezedSTFT']));
 
 %% Import the signals used in the paper
 % load McCrossingChirps.mat
-% % load McSyntheticMixture5.mat
+load McSyntheticMixture5.mat
 % % load McDampedCos.mat
 
 % N = length(x); % The signal has 1024 samples.

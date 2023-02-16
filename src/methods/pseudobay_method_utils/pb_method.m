@@ -19,11 +19,11 @@ if nargin<4 || isempty(ds)
 end
 
 if nargin<5 || isempty(beta)
-    beta  = 0.6;
+    beta  = 0.4;
 end
 
 if nargin<6 || isempty(alpha)
-    alpha = 0.5;
+    alpha = 0.4;
 end
 
 if nargin<7 || isempty(div)
@@ -31,11 +31,11 @@ if nargin<7 || isempty(div)
 end
 
 if nargin<8 || isempty(Pnei)
-    Pnei = 15;
+    Pnei = 48;
 end
 
 if nargin<9 || isempty(PneiMask)
-    PneiMask = 15;
+    PneiMask = 48;
 end
 
 if nargin<10 || isempty(M)
@@ -86,8 +86,8 @@ for c = 1:Ncomp
 end
 
 % Return reconstructed signal by summing the components.
-xr = real(reconstruct_func(tfr .* mask_total, L, M));
-% xr = sum(x_hat,2).';
+% xr = real(reconstruct_func(tfr .* mask_total, L, M));
+xr = sum(x_hat,2).';
 
 if return_comps
     xr = x_hat.';
