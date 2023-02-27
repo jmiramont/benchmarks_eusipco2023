@@ -1,4 +1,4 @@
-function [ m_SR_MB, m_LCR_MB, IF_MB] = Nils_modeExtract_2(x, M, Nr, sigma_s, clwin )
+function [ m_LCR_simple, m_LCR_RRP, IF_RRP] = Nils_modeExtract_2(x, M, Nr, sigma_s, clwin )
 % [ m_SR_Cl,m_SR_MB,m_LCR_Cl, m_LCR_MB, STFT] = Nils_modeExtract(x, M, Nr, sigma_s, clwin )
 %
 %  Nils mode extraction method
@@ -44,9 +44,19 @@ Nr = 1;
 smooth_p = 1 - 10^(-4);
 t = (0:N-1)'/N;
 %
-[g, Lh] = create_gaussian_window(N, Nfft, sigma_LC);
-[STFT, omega, ~, QM, ~, tau] = FM_operators(x, L, Nfft, g, Lh, sigma_LC);
-[Spl_LC, ~] = R1_RRP_RD(STFT, QM, omega, tau, L, Nfft, Nr, sigma_LC, smooth_p);
+[g, Lh] = create_gaussian_window(N, Nfft, sigma_s);
+[STFT, omega, ~, QM, ~, tau] = FM_operators(x, N, Nfft, g, Lh, sigma_s);
+[Spl_LC, ~] = R1_RRP_RD(STFT, QM, omega, tau, N, Nfft, Nr, sigma_s, smooth_p);
+
+IF_RRP = []
+for n = 1:Nr
+    spl_n = Spl_LC(n).spline
+    IF_RRP = [IF_RRP, ppval(spl_n, t)]
+end
+Cs_RRP = round(IF_RRP / N * Nfft) + 1
+Cs_RRP = max(1, Cs_RRP)
+Cs_RRP = min(Nfft, Cs_RRP)
+
 %
 % Spl = Spl_LC;
 % sigma_s = sigma_LC;
@@ -54,8 +64,8 @@ t = (0:N-1)'/N;
 % DF1 = fnval(fnder(Spl(1).spline), t);
 % R1 = 1/(sqrt(2*pi)*sigma_s)*sqrt(1 + sigma_s^4*DF1.^2);
 
-[g, Lh] = create_gaussian_window(N, Nfft, sigma_s);
-[STFT, omega, ~, QM, ~, tau] = FM_operators(x, N, Nfft, g, Lh, sigma_s);
+%[g, Lh] = create_gaussian_window(N, Nfft, sigma_s);
+%[STFT, omega, ~, QM, ~, tau] = FM_operators(x, N, Nfft, g, Lh, sigma_s);
 
 aux = STFT(1:round(Nfft/2)+1,:);
 % QM : chirp rate
@@ -72,17 +82,18 @@ aux = STFT(1:round(Nfft/2)+1,:);
 %         [m_SR_Cl, m_LCR_Cl, IF_Cl] = R1_MR_and_LCR_spl(STFT, Spl_Cl, g, Lh, sigma_s, Nr, Nfft, L);
 
 %% reconstruction (m_SR_Cl : simple reconstruction [8], Linear Chirp Reconstruct  (LCR)
-[m_SR_Cl, m_LCR_Cl, IF_Cl, STFT_Cl] = R1_MR_and_LCR_grid(STFT, QM, Cs_simple, g, Lh, sigma_s, Nr, Nfft, N);
+[~, m_LCR_simple, ~, ~] = R1_MR_and_LCR_grid(STFT, QM, Cs_simple, g, Lh, sigma_s, Nr, Nfft, N);
+[~, m_LCR_RRP, ~, ~] = R1_MR_and_LCR_grid(STFT, QM, Cs_RRP, g, Lh, sigma_s, Nr, Nfft, N);
 
 
 %         fprintf('VFB MB, ');
-[Cs_VFB_MB] = VFB_MB_exridge_MCS(aux, sigma_s, QM, 2, Nr);
+%[Cs_VFB_MB] = VFB_MB_exridge_MCS(aux, sigma_s, QM, 2, Nr);
 %         Spl_MB = struct('spline', cell(1, Nr));
 %         for m=1:Nr
 %             Spl_MB(m).spline = spline((0:L-1)/L, (Cs_VFB_MB(m, :) - 1)*L/Nfft);
 %         end
 %         [m_SR_MB, m_LCR_MB, IF_MB] = R1_MR_and_LCR_spl(STFT, Spl_MB, g, Lh, sigma_s, Nr, Nfft, L);
-[m_SR_MB, m_LCR_MB, IF_MB, STFT_LCR] = R1_MR_and_LCR_grid(STFT, QM, Cs_VFB_MB, g, Lh, sigma_s, Nr, Nfft, N);
+%[m_SR_MB, m_LCR_MB, IF_MB, STFT_LCR] = R1_MR_and_LCR_grid(STFT, QM, Cs_VFB_MB, g, Lh, sigma_s, Nr, Nfft, N);
 
 
 

@@ -12,7 +12,7 @@ if nargin < 4 || isempty(L)
 end
 
 if nargin < 5 || isempty(Pnei)
-    Pnei = 35; 
+    Pnei = 48; 
 end
 
 if nargin < 6 || isempty(M0)
