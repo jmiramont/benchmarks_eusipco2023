@@ -33,7 +33,7 @@ if isreal(x)
 end
 %------------------------------------------------------------------------
 
-[ m_SR_MB, m_LCR_MB, IF_MB] = Nils_modeExtract_2(x, M, Ncomp);
+[m_SR_MB, m_LCR_MB, IF_MB] = Nils_modeExtract(x, M, Ncomp,sigma_s);
 
 if approach == 1
     X = real(m_SR_MB);

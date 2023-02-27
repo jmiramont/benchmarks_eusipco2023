@@ -9,22 +9,22 @@ addpath(strcat([folder 'tools']));
 addpath(strcat([folder 'synchrosqueezedSTFT']));
 
 %% Import the signals used in the paper
-% load McCrossingChirps.mat
-load McSyntheticMixture5.mat
-% % load McDampedCos.mat
+load McCrossingChirps.mat
+% load McSyntheticMixture5.mat
+% load McDampedCos.mat
 
-% N = length(x); % The signal has 1024 samples.
-% x = x.';
-% Ncomp = double(Ncomp);
-% X0 = comps.';
+N = length(x); % The signal has 1024 samples.
+x = x.';
+Ncomp = double(Ncomp);
+X0 = comps.';
 
 %% Define signal x0
-N  = 1024;                        %% signal length
-X0(:,1) = 0.8 * fmlin(N,0.41,0.1);
-X0(:,2) = fmlin(N,0.1,0.45);
-x = sum(X0,2);
-x = real(x); % <- Make the signal real.
-Ncomp = size(X0,2);                  %% number of components
+% N  = 1024;                        %% signal length
+% X0(:,1) = 0.8 * fmlin(N,0.41,0.1);
+% X0(:,2) = fmlin(N,0.1,0.45);
+% x = sum(X0,2);
+% x = real(x); % <- Make the signal real.
+% Ncomp = size(X0,2);                  %% number of components
 
 %%
 % Contaminate the signal with real Gaussian white noise.
@@ -36,7 +36,7 @@ xn = sigmerge(x, noise, SNRin);
 
 %% Apply EM method with default parameters
 %best RQF for Crossing Chirps.
-step_r= 27; step_v=58;
+% step_r= 27; step_v=100;
 
 %best RQF for SyntheticMixture5
 % step_r= 34; step_v=100;
@@ -46,10 +46,12 @@ step_r= 27; step_v=58;
 
 
 %% best mask
-% step_r = 20;
-% step_v = 60;
+step_r = [];
+step_v = [];
 % xr = em_method(x,Ncomp,M,L,c, step_r, step_v, return_comps, return_freq)
+tic()
 [X] = em_method(xn,Ncomp,[],[],[], step_r, step_v, true);
+toc()
 xr = sum(X.',2);
 
 %% Compute the QRF for the whole signal.

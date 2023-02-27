@@ -7,9 +7,14 @@ from benchmark_demo.benchmark_utils import MethodTemplate, MatlabInterface
 # (without the .m extension). Then get the matlab function as:
 
 # Paths to additional code for the method to add to Matlab path variable.
-paths = ['src\methods\pseudobay_method_utils',
-        '..\src\methods\pseudobay_method_utils'
+# paths = ['src\methods\pseudobay_method_utils',
+#         '..\src\methods\pseudobay_method_utils'
+#         ]
+
+paths = ['src\methods\PB_new',
+        '..\src\methods\PB_new'
         ]
+
 
 mlint = MatlabInterface('pb_method', add2path=paths) 
 matlab_function = mlint.matlab_function # A python function handler to the method.

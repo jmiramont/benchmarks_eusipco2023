@@ -8,7 +8,7 @@ if nargin <3 || isempty(use_sst)
 end
 
 if nargin<4 || isempty(Pnei)
-    Pnei=35;
+    Pnei=48;
 end
 
 if nargin<5 || isempty(M)

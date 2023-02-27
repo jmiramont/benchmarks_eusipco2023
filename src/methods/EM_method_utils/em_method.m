@@ -22,11 +22,11 @@ if ~exist('c', 'var') || isempty(c)
 end
 
 if ~exist('step_r', 'var') || isempty(step_r)
-    step_r=34; %27; 
+    step_r= 27; 
 end
 
 if ~exist('step_v', 'var') || isempty(step_v)
-    step_v=89; %58
+    step_v= 100;
 end
 
 % if ~exist('cl', 'var')

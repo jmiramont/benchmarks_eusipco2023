@@ -7,8 +7,12 @@ from benchmark_demo.benchmark_utils import MethodTemplate, MatlabInterface
 # (without the .m extension). Then get the matlab function as:
 
 # Paths to additional code for the method to add to Matlab path variable.
-paths = ['src\methods\EM_method_utils',
-        '..\src\methods\EM_method_utils'
+# paths = ['src\methods\EM_method_utils',
+#         '..\src\methods\EM_method_utils'
+#         ]
+
+paths = ['src\methods\EM_new',
+        '..\src\methods\EM_new'
         ]
 
 mlint = MatlabInterface('em_method', add2path=paths, matlab_warnings=False) 
@@ -55,10 +59,16 @@ class NewMethod(MethodTemplate):
     #     return (([], [], [], [], [], [], [], [], True,),)  # # Use this to return all
     def get_parameters(self):            
         if self.task == 'component_denoising':            
-            return (([],[],[],[],[],[],True,),)  # Return components
+            return (([],[],[],[],[],[],True,),
+                    # ([],[],[],[],1,100,True,),
+                    )  # Return components
 
         if self.task == 'inst_frequency':            
-            return (([],[],[],[],[],[],[],True,),)  # Return inst freq.            
+            return (([],[],[],[],[],[],[],True,),
+                    # ([],[],[],[],1,100,[],True,),
+                    )  # Return inst freq.            
 
         if self.task == 'denoising':
-            return (((),{}),)        
+            return ((([],[],[],[],[],[]),{}),
+                    # (([],[],[],[],1,100),{}),
+                    )        
