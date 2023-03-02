@@ -1,4 +1,4 @@
-function [xr,tf,mask_total] = em_method(x,Ncomp,M,L,c, step_r, step_v, return_comps, return_freq)
+function [xr,tf2,mask_total] = em_method(x,Ncomp,M,L,c, step_r, step_v, return_comps, return_freq)
 % This function is called from the (python based) benchmark.
 % It wraps the EM method and parameters (this of course can be modified).
 %--------------------------------------------------------------------------
@@ -58,7 +58,7 @@ ifplot = 0;
 %% Prior choice
 % reg_mu='None';
 reg_mu='Lap';
-%reg_mu='TV';
+% reg_mu='TV';
 
 %%zero-padding
 zp = 0; %round(3*L); %%3 sigma thumb rule 
@@ -73,10 +73,12 @@ M2 = floor(M/2);
 [tfr]  = tfrgab2([z;x;z], M, L);
 Spect = abs(tfr(1:M2,:)).^2;
 
+% figure();
+% imagesc(Spect);
 
 Ns = 1;
 [Fct]=comp_Fc(M,L)+eps; %% Data distribution
-[W_out,P,tf]=Mod_Estim_W_EM_multi((Spect.^2)',Fct,Ncomp,1      ,reg_mu,c,step_r,step_v,ifplot,1);
+[W_out,P,tf]=Mod_Estim_W_EM_multi((Spect).',Fct,Ncomp,1      ,reg_mu,c,step_r,step_v,ifplot,1);
 %                                (Y          ,Fct,Ns   ,step_Nx,reg_mu,c,step_r,step_v,ifplot,bolpol)
 
 
@@ -119,6 +121,7 @@ if return_comps
 end
 
 % If return_freq is True, then return the components' IF
+tf2 = tf.'/M;
 if return_freq
     xr = tf.'/M;
 end

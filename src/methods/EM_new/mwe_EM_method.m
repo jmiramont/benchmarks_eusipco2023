@@ -9,9 +9,9 @@ addpath(strcat([folder 'tools']));
 addpath(strcat([folder 'synchrosqueezedSTFT']));
 
 %% Import the signals used in the paper
-% load McCrossingChirps.mat
+load McCrossingChirps.mat
 % load McSyntheticMixture5.mat
-load McDampedCos.mat
+% load McDampedCos.mat
 
 N = length(x); % The signal has 1024 samples.
 x = x.';
@@ -33,30 +33,21 @@ noise = randn(N,1);
 SNRin = 20;
 xn = sigmerge(x, noise, SNRin);
 
-
-%% Apply EM method with default parameters
-%best RQF for Crossing Chirps.
-% step_r= 27; step_v=58;
-
-%best RQF for SyntheticMixture5
-% step_r= 34; step_v=100;
-
-%best RQF for DampedCos.
-% step_r= 34; step_v=45;
-
-
 %% best mask
-step_r = [];
-step_v = [];
+M=N;
+L = 20;
+step_r = 8; %round(3*sqrt(M/(pi*L))+1);
+step_v = 20; %4*step_r;
+
 % xr = em_method(x,Ncomp,M,L,c, step_r, step_v, return_comps, return_freq)
 tic()
-[X,tf] = em_method(xn,Ncomp, [], [], [], step_r, step_v, true);
+[X,tf] = em_method(xn,Ncomp, M, L, [], step_r, step_v, true);
 toc()
-[xr,~,mask] = em_method(xn,Ncomp, [], [], [], step_r, step_v);
+[xr,~,mask] = em_method(xn,Ncomp, M, L, [], step_r, step_v);
 
 rqf = RQF(x(100:end-100),xr(100:end-100));
-[ I, s ] = match_components(comps, X);
-
+% [ I, s ] = match_components(comps, X);
+[ I, s ] = match_components(instf, tf);
 
 %% Compare recovered signal and the original (denoised) one.
 figure();
@@ -65,9 +56,9 @@ hold on;
 plot(x,'--g','DisplayName','Original signal'); 
 legend()
 
-
 %%
-[H, L] = roundgauss(2*N); 
+
+[H, L] = roundgauss(2*N);
 
 % Show the original signal components and the recovered ones (not ordered
 % by similarity).
@@ -82,7 +73,7 @@ for i=1:Ncomp
     subplot(Ncomp+1,2,2*i);
     S = tfrsp(X(i,:).',1:N,2*N,H);
     imagesc(S(1:N+1,:)); hold on;
-    plot(tf(:,i)*2,'r');
+    plot(tf(i,:)*2*N,'r');
     title('Recovered Component: '+string(i));
 end
 

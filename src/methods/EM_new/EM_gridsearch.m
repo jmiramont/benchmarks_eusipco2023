@@ -52,48 +52,59 @@ xn = sigmerge(x, noise, SNRin);
 v1_rng = linspace(v1_min,v1_max, nval1);
 v2_rng = linspace(v2_min,v2_max, nval2);
 
-best_v = [-1 -1];
+best_v = [-inf -inf];
 best_qrf = -inf;
 qrf = zeros([nval1,nval2]);
 for i = 1:nval1
     parfor j = 1:nval2
-      step_r = round(v1_rng(i));
-      step_v = round(v2_rng(j));
-      %% Apply EM method with default parameters
-      %20 / 60 works
-      [X] = em_method(xn,Ncomp,[],[],[],step_r, step_v, true);
-      
-      %% Compute the QRF for the whole signal.
-%       qrf(i,j) = RQF(x,xr); % RQF of the whole signal.
-      [ I, s ] = match_components(comps, X);
-      qrf(i,j) = mean(s);
-      
-%       if qrf > best_qrf
-%         best_v = [step_r step_v]
-%         best_qrf = qrf
-%         
-%         rqf_res(i,j) = qrf;
-%       end
+        step_r = round(v1_rng(i));
+        step_v = round(v2_rng(j));
+        % Apply EM method with default parameters
+        %20 / 60 works
+        [X] = em_method(xn,Ncomp,[],[],[],step_r, step_v, true);
+
+        % Compute the QRF for the whole signal.
+        %     qrf(i,j) = RQF(x,xr); % RQF of the whole signal.
+        [ I, s ] = match_components(comps, X);
+        qrf(i,j) = mean(s);
+
     end
 end
 
+
+%%
+for i = 1:nval1
+    for j = 1:nval2
+        if qrf(i,j) > best_qrf
+            step_r = round(v1_rng(i));
+            step_v = round(v2_rng(j));
+            best_v = [step_r step_v];
+            best_qrf = qrf(i,j);
+            rqf_res(i,j) = qrf(i,j);
+        end
+    end
+end
+
+
+
+%%
 figure
-imagesc(v1_rng,v2_rng, rqf_res)
+imagesc(v1_rng,v2_rng, log10(-qrf))
 hold on
-plot(best_v(1),best_v(2), 'kx')
-xlabel('step_r')
-ylabel('step_v')
+plot(best_v(2),best_v(1), 'rx')
+xlabel('step_v')
+ylabel('step_r')
 
 %% Compare recovered signal and the original (denoised) one.
 figure();
 plot(xr,'k','DisplayName','Recovered signal');
-hold on; 
-plot(x,'--g','DisplayName','Original signal'); 
+hold on;
+plot(x,'--g','DisplayName','Original signal');
 legend()
 
 
 %%
-[H, L] = roundgauss(2*N); 
+[H, L] = roundgauss(2*N);
 
 % Show the original signal components and the recovered ones (not ordered
 % by similarity).
@@ -104,7 +115,7 @@ for i=1:Ncomp
     S = tfrsp(real(X0(:,i)),1:N,2*N,H);
     imagesc(S(1:N+1,:));
     title('Original Component: '+string(i));
-    
+
     subplot(Ncomp+1,2,2*i);
     S = tfrsp(X(i,:).',1:N,2*N,H);
     imagesc(S(1:N+1,:));
