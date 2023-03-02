@@ -1,8 +1,13 @@
-clear all
+clear
 close all
 
+addpath('./signals_mat')
+addpath('./tools')
 %%% script for searching the best set of parameters
 %step_r / step-v
+%
+to_optimize = 'separability'; %'denoising'
+
 
 nval1 = 20;
 nval2 = 20;
@@ -25,8 +30,8 @@ addpath(strcat([folder 'tools']));
 addpath(strcat([folder 'synchrosqueezedSTFT']));
 
 %% Import signal from file
-% load McCrossingChirps.mat
-load McSyntheticMixture5.mat
+ load McCrossingChirps.mat
+%load McSyntheticMixture5.mat
 % load McDampedCos.mat
 
 N = length(x); % The signal has 1024 samples.
@@ -65,7 +70,18 @@ for i = 1:nval1
       xr  = sum(X.',2);
 
       %% Compute the QRF for the whole signal.
-      qrf(i,j) = RQF(x,xr);
+      
+      if to_optimize == 'separability'
+        rqf_tmp = 0;
+        [ I ] = match_components(comps, X);
+        for k = 1:Ncomp
+          rqf_tmp = rqf_tmp+RQF(comps(k,:),X(I(k),:));
+        end
+        rqf_tmp = rqf_tmp/Ncomp;
+        qrf(i,j) = rqf_tmp;
+      else
+		qrf(i,j) = RQF(x,xr);
+	  end
       qrf(i,j)
       
 %       if qrf > best_qrf
