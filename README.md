@@ -1,4 +1,4 @@
-# Benchmarks of Multi-Component \\ Signal Analysis Methods
+# Benchmarks of Multi-Component Signal Analysis Methods
 This repository complements the article "Benchmarks of Multi-Component Signal Analysis Methods" by J.M. Miramont, Q. Legros, D. Fourer and F. Auger.
 
 ## Abstract 
@@ -23,7 +23,7 @@ The folder ```notebooks``` holds a number of minimal working examples of the met
 
 ## MATLAB examples
 
-Inside the directory [```src/methods```](src/methods) there are several folders with the MATLAB implementations, each one named after their corresponding method. There you can find files called  ```mwe_*.m``` with a minimal working example of each method. The MATLAB functions that it are called from the Python-based benchmark always start with ```method_```.
+Inside the directory [```src/methods```](src/methods) there are several folders with the Matlab implementations, each one named after their corresponding method. There you can find files called  ```mwe_*.m``` with a minimal working example of each method. The Matlab functions that it are called from the Python-based benchmark always start with ```method_```.
 
 
 # Benchmarking a new method
@@ -61,11 +61,12 @@ conda config --set auto_activate_base false
 conda deactivate
 ```
 
-## Adding your own Python-based method
+## Creating a file represententing a new method
 
 Whether your method is implemented in Python or Matlab, you must create a new ```.py``` file the name of which must start with *method_* and have certain content to be automatically discovered by the toolbox. The purpose of this file is to encapsulate your method in a new class. This is much easier than it sounds :). To make it simpler, [a file called *method_new_basic_template.py* is made available](./new_method_example/method_new_basic_template.py) (for Python users) which you can use as a template. You just have to fill in the parts that implement your method. Matlab users can also find a template [here](./new_method_example/method_new_basic_template_matlab.py).
-A new method can be tested against others by adding a file into the folder [src/methods](./src/methods) containing the definition of a Python class with some specific characteristics. We shall see how to do this using a template file in the following sections.
+A new method can then be tested against others by adding this file into the folder [src/methods](./src/methods). We shall see how to do this using a template file in the following sections.
 
+### Python-based methods
 First, the function implementing your method must have the following signature if you're working in python:
 
 ```python
@@ -73,32 +74,9 @@ First, the function implementing your method must have the following signature i
         ...
 ```
 
-Methods should receive an ```(N,)``` numpy array representing a signal, where and `N` is the number of their time samples. Additionally, they should receive a variable number of input arguments to allow testing different combinations of input parameters.
+Methods should receive an ```(N,)``` numpy array representing a discrete-time signal, where and `N` is the number of time samples. Additionally, they should receive a variable number of input arguments to allow testing different combinations of input parameters.
 
-## Adding a Matlab-based method
-
-
-or in Matlab:
-
-```python
-    function [X]  = a_new_method(signal, ):
-        ...
-```
-
-
-
- The shape and type of the output depends on the task.
-
-- For Denoising: The output must be a numpy array and have the same shape as the input.
-- For : The output must be a boolean variable where ```False``` indicates no presence of a signal, and ```True``` that a signal has been detected.
-
-In the following section, we will see how to create a class that compartmentalize your method and outline the instructions to run the benchmark.
-
-### Using a template file for your method
-
-
-
-Let's analyze the contents of the template file [*method_new_basic_template.py*](./new_method_example/method_new_basic_template.py), which is divided in three sections. In the first section, you can import a function with your method or implement everything in the same file:
+In the first section of the template file [*method_new_basic_template.py*](./new_method_example/method_new_basic_template.py), you can import a function with your method or implement everything in the same file:
 
 ```python
 """ First section ----------------------------------------------------------------------
@@ -108,20 +86,20 @@ Let's analyze the contents of the template file [*method_new_basic_template.py*]
 from methods.benchmark_utils import MethodTemplate # Import the template!
 ```
 
-Additionally, the [abstract class](https://docs.python.org/3/library/abc.html) `MethodTemplate` is imported here. Abstract classes are not implemented, but they serve the purpose of establishing a template for new classes, by forcing the implementation of certain *abstract* methods. We will see later that the class that encapsulates your method must inherit from this template.
+<!-- Additionally, the [abstract class](https://docs.python.org/3/library/abc.html) `MethodTemplate` is imported here. Abstract classes are not implemented, but they serve the purpose of establishing a template for new classes, by forcing the implementation of certain *abstract* methods. We will see later that the class that encapsulates your method must inherit from this template. -->
 
-The second section of the file should include all the functions your method needs to work. This functions could also be defined in a separate module imported in the previous section as well. Although it is not mandatory to add them here, but we recommend it so as to keep everything in a single file.
+The second section of the file should include all the functions your method needs to work. This functions could also be defined in a separate module imported in the previous section as well.
 
 ```python
 """ Second section ---------------------------------------------------------------------
 | Put here all the functions that your method uses.
 | 
-| def a_function_of_my_method(signal,params):
+| def a_function_of_my_method(signal, *args, **kwargs):
 |   ...
 """
 ```
 
-In the third and final section, your method is encapsulated in a new class called `NewMethod` (you can change this name if you prefer to, but it is not strictly necessary). As mentioned before, the only requisite for the class that represents your method is that it inherits from the [abstract class](https://docs.python.org/3/library/abc.html) `MethodTemplate`. This simply means that you will have to implement the class constructor and a class function called -unsurprisingly- `method()`:
+In the third and final section, your method is encapsulated in a new class called `NewMethod` (you can change this name if you prefer to, but it is not strictly necessary). The only requisite for the class that represents your method is that it inherits from the [abstract class](https://docs.python.org/3/library/abc.html) `MethodTemplate`. This simply means that you will have to implement the class constructor and a class function called -unsurprisingly- `method()`:
 
 ```python
 """ Third section ----------------------------------------------------------------------
@@ -150,7 +128,7 @@ class NewMethod(MethodTemplate):
 
 The constructor function ```__init__(self)``` must initialize the attributes ```self.id``` and ```self.task```. The first is a string to identify your method in the benchmark. The second is the name of the task your method is devoted to. This can be either ```'denoising'``` or ```'detection'```. Notice that if you fail to use such names this will prevent you from benchmarking your method.
 
-Lastly, as anticipated above, you have to implement the class function ```method(self, signals, params)```. This function may act as a wrapper of your method, i.e. you implement your method elsewhere and call it from this function, or you could implement it directly here. This is up to you :).
+Lastly, as anticipated above, you have to implement the class function ```method(self, signals, *args, **kwargs)```. This function may act as a wrapper of your method, i.e. you implement your method elsewhere and call it from this function passing all the parameters in the process, or you could implement it directly here.
 
 If you want to test your method using different sets of parameters, you can also implement the function `get_parameters()` to return a list with the desired input parameters (you can find an example of this [here](./new_method_example/method_new_with_parameters.py)).
 
@@ -158,24 +136,17 @@ If you want to test your method using different sets of parameters, you can also
 
 Finally, **you have to move the file** with all the modifications to the folder [/src/methods](./src/methods). Changing the name of the file is possible, but keep in mind that **the file's name must start with "*method_*" to be recognizable**.
 
-### Checking everything is in order with ```pytest```
+### Adding a Matlab-based method
 
-Once your dependencies are ready, you should check that everything is in order using the ```pytest``` testing suit. To do this, simply run the following in a console located in your local version of the repository:
+Benchmarking matlab-based methods is possible thanks to the incorporated Matlab's python engine, that allows communication between python and a Matlab's session.
 
-```bash
-poetry run pytest
+The Matlab function implementing your method must have a particular signature. For example, for a method with two input parameters should be:
+```matlab
+    function [X]  = a_new_method(signal, param_1, param_2):
+        ...
 ```
 
-This will check a series of important points for running the benchmark online, mainly:
-
-1. Your method class inherits the ```MethodTemplate``` abstract class.
-2. The inputs and outputs of your method follows the required format according to the designated task.
-
-Once the tests are passed, you can now either create a pull request to run the benchmark remotely, or [run the benchmark locally](#running-this-benchmark-locally).
-
-## Benchmarking Matlab-implemented methods
-
-Benchmarking matlab-based methods is possible thanks to the incorporated matlab's python engine, that allows communication between python and a matlab's session.
+Your method can have all the (positional) input arguments as you need.
 
 Matlab python's engine is only compatible with certain python versions, depending on the local Matlab version you are running. If you are interested in using the benchmark locally, i.e. in your computer, [check that your version of matlab and python are compatible](https://www.mathworks.com/content/dam/mathworks/mathworks-dot-com/support/sysreq/files/python-compatibility.pdf).
 
@@ -232,6 +203,7 @@ class NewMethod(MethodTemplate):
 *Remark 2: A Matlab method must comply with the [output parameters shapes expected by the toolbox](#benchmarking-your-own-method). Matlab vectors of double type numbers will be casted into numpy arrays of floats, and Matlab's boolean types will be casted into python booleans. If your method returns more than one parameter, only the first one returned is taken*.
 
 
+
 ## Adding dependencies
 Your method might need particular modules as dependencies that are not currently listed in the dependencies of the default benchmark. You can add all your dependencies by modifying the ```.toml``` file in the folder, under the ```[tool.poetry.dependencies]``` section. For example:
 
@@ -261,5 +233,27 @@ to update the .lock file in the folder.
 
 *Remark: Notice that the use of ```poetry``` for adding the dependencies of your packet is key for running the benchmark using [GitHub Actions](./.github/workflows), please consider this while adding your method.*
 
+### Checking everything is in order with ```pytest```
+
+Once your dependencies are ready, you should check that everything is in order using the ```pytest``` testing suit. To do this, simply run the following in a console located in your local version of the repository:
+
+```bash
+poetry run pytest
+```
+
+This will check a series of important points for running the benchmark online, mainly:
+
+1. Your method class inherits the ```MethodTemplate``` abstract class.
+2. The inputs and outputs of your method follows the required format according to the designated task.
+
+Once the tests are passed, you can now either create a pull request to run the benchmark remotely, or [run the benchmark locally](#running-this-benchmark-locally).
 
 
+### Functions
+
+ The shape and type of the output depends on the task.
+
+- For Denoising: The output must be a numpy array and have the same shape as the input.
+- For : The output must be a boolean variable where ```False``` indicates no presence of a signal, and ```True``` that a signal has been detected.
+
+In the following section, we will see how to create a class that compartmentalize your method and outline the instructions to run the benchmark.
