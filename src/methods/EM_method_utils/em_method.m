@@ -1,4 +1,4 @@
-function [xr,tf2,mask_total] = em_method(x,Ncomp,M,L, Pnei, step_r, step_v, return_comps, return_freq)
+function [xr,tf2,mask_total] = em_method(x,Ncomp,M,L, Pnei, step_r, step_v, return_comps, return_freq, bolpol)
 % This function is called from the (python based) benchmark.
 % It wraps the EM method and parameters (this of course can be modified).
 %--------------------------------------------------------------------------
@@ -54,6 +54,10 @@ if ~exist('return_freq', 'var') || isempty(return_comps)
     return_freq = false;
 end
 
+if ~exist('bolpol', 'var') || isempty(bolpol)
+    bolpol=1;
+end
+
 ifplot = 0;
 % Parameter for sequential MMAP estimation
 % step_r = 30; %30; % removal window size
@@ -80,7 +84,7 @@ Spect = abs(tfr(1:M2,:)).^2;
 
 % Ns = 1;
 [Fct]=(comp_Fc(M,L))+eps; %% Data distribution
-[W_out,P,tf]=Mod_Estim_W_EM_multi(Spect',Fct,Ncomp,1,reg_mu,c,step_r,step_v,ifplot,1);
+[W_out,P,tf]=Mod_Estim_W_EM_multi(Spect',Fct,Ncomp,1,reg_mu,c,step_r,step_v,ifplot,bolpol);
 
 
 %% EM algorithm mask

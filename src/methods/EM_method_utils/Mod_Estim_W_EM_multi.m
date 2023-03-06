@@ -21,7 +21,7 @@ function [W_out,P,Mu_out]=Mod_Estim_W_EM_multi(Y,Fct,Ns,step_Nx,reg_mu,c,step_r,
 
 
 %% Initialization
-Y = Y./sum(Y,2);
+% Y = Y./sum(Y,2);
 [N,M]=size(Y);% nb of time bins x nb of frequency bins
 Nx=size(Fct,2); % nb of admissible frequencies
 Nz = Nx/step_Nx; % subsampling the frequency grid for first iterations -> speed up the estimation

@@ -1,0 +1,10 @@
+http://www.ece.rice.edu/dsp/software/bat.shtml
+
+Bat chirp signal: Digitized 2.5 microsecond echolocation pulse emitted by the Large Brown Bat, Eptesicus Fuscus. 
+There are 400 samples; the sampling period was 7 microseconds. 
+Download the signal as the file batsig.bin.Z. (The .bin extension does not mean `binary' - rather it simply tricks 
+your browser into `save' rather than `display' mode.)
+
+Acknowledgement: Please acknowledge use of this data in publications as follows: 
+``The author wishes to thank Curtis Condon, Ken White, and Al Feng of the Beckman Institute of the University 
+of Illinois for the bat data and for permission to use it in this paper.''
