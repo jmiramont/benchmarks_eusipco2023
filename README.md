@@ -26,9 +26,18 @@ Additionally, the directory [```src/methods```](src/methods) contains several fo
 
 # Benchmarking a new method
 
+- [Benchmarks of Multi-Component Signal Analysis Methods](#benchmarks-of-multi-component-signal-analysis-methods)
+  - [Abstract](#abstract)
+  - [Relevant Files](#relevant-files)
 - [Benchmarking a new method](#benchmarking-a-new-method)
-- [Benchmarking your own method in your computer](#benchmarking-your-method-in-your-computer)
-- [Matlab-implemented methods](#matlab-implemented-methods)
+  - [Installation using ```poetry```](#installation-using-poetry)
+  - [Creating a file represententing a new method](#creating-a-file-represententing-a-new-method)
+    - [Python-based methods](#python-based-methods)
+    - [Matlab-based method](#matlab-based-method)
+  - [Running the benchmark with new methods](#running-the-benchmark-with-new-methods)
+  - [Changing the benchmark configuration](#changing-the-benchmark-configuration)
+  - [Adding dependencies](#adding-dependencies)
+    - [Size of outputs according to the task](#size-of-outputs-according-to-the-task)
 
 You can use this benchmark to test a new method against others.
 You can clone this repository and benchmark your own method locally, i.e. in your computer. This will allow you to run the benchmarks with all the modifications you want (exploring different parameters for you method, type of signals, number of repetitions, etc.).
@@ -67,6 +76,7 @@ Whether your method is implemented in Python or Matlab, you must create a new ``
 A new method can then be tested against others by adding this file into the folder [src/methods](./src/methods). We shall see how to do this using a template file in the following sections.
 
 ### Python-based methods
+
 First, the function implementing your method must have the following signature if you're working in python:
 
 ```python
@@ -136,7 +146,7 @@ If you want to test your method using different sets of parameters, you can also
 
 Finally, **you have to move the file** with all the modifications to the folder [/src/methods](./src/methods). Changing the name of the file is possible, but keep in mind that **the file's name must start with "*method_*" to be recognizable**.
 
-### Adding a Matlab-based method
+### Matlab-based method
 
 Benchmarking Matlab-implemented methods is possible thanks to the incorporated Matlab's python engine, that allows communication between python and a Matlab's session.
 
