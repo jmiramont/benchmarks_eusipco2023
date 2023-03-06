@@ -137,7 +137,7 @@ Finally, **you have to move the file** with all the modifications to the folder 
 
 ### Adding a Matlab-based method
 
-Benchmarking matlab-based methods is possible thanks to the incorporated Matlab's python engine, that allows communication between python and a Matlab's session.
+Benchmarking Matlab-implemented methods is possible thanks to the incorporated Matlab's python engine, that allows communication between python and a Matlab's session.
 
 The Matlab function implementing your method must have a particular signature. For example, for a method with two input parameters should be:
 
@@ -145,7 +145,7 @@ The Matlab function implementing your method must have a particular signature. F
     function [X]  = a_new_method(signal, param_1, param_2)
 ```
 
-Your method can have all the (positional) input arguments as you need.
+Your method can have all the (positional) input arguments you need.
 
 Matlab's python engine is only compatible with certain Python versions, depending on the local Matlab installation you are running. [Check that your version of matlab and python are compatible](https://www.mathworks.com/content/dam/mathworks/mathworks-dot-com/support/sysreq/files/python-compatibility.pdf).
 
@@ -201,7 +201,32 @@ class NewMethod(MethodTemplate):
 
 *Remark 2: A Matlab method must comply with the [output parameters shapes expected by the toolbox](#benchmarking-your-own-method). Matlab vectors of double type numbers will be casted into numpy arrays of floats, and Matlab's boolean types will be casted into python booleans. If your method returns more than one parameter, only the first one returned is taken*.
 
+## Running the benchmark with new methods
+Once the new methods are added, you can run a benchmark by executing the files ```run_this_benchmark_*.py``` located in the repository.
+You can do this using the local environment created with ```poetry``` by running:
 
+```bash
+poetry run python run_this_benchmark_denoising.py
+```
+
+This will run the benchmark using new added methods, avoiding previously explored ones and saving time. You can change this from the configuration file [```config_benchmarks.yaml```](./config_benchmarks.yaml) located in the repository.
+
+## Changing the benchmark configuration
+The benchmark parameters can be modified using the [```config_benchmarks.yaml```](./config_benchmarks.yaml) file. Each line of this file define an input parameter of the benchmark:
+```yaml
+N: 1024 # Number of time samples
+SNRin: [-20,-10,0,10,20] # Values of SNR to evaluate.
+repetitions: 30 #
+parallelize: 4  # If False, run the benchmark in a serialized way. If True or int, runs the benchmark in parallel with the indicated number of cores. 
+verbosity: 4    # Controls the messages appearing in the console.
+using_signals: [
+                'McDampedCos',
+                'McCrossingChirps',
+                'McSyntheticMixture5',
+              ]
+
+add_new_methods: True # Run again the same benchmark but with new methods:
+```
 
 ## Adding dependencies
 Your method might need particular modules as dependencies that are not currently listed in the dependencies of the default benchmark. You can add all your dependencies by modifying the ```.toml``` file in the folder, under the ```[tool.poetry.dependencies]``` section. For example:
@@ -248,11 +273,9 @@ This will check a series of important points for running the benchmark online, m
 Once the tests are passed, you can now either create a pull request to run the benchmark remotely, or [run the benchmark locally](#running-this-benchmark-locally).
 
 
-### Functions
+### Size of outputs according to the task
+The shape and type of the output depends on the task.
+- For Denoising: The output must be a vector array with the same length as the signal.
+- For Mode Retreival: The output must be an array of size ```[J,N]```, where ```J``` is the number of components, and ```N``` is the length of the signal.
+- For Instantaneous Frequency: The output must be an array of size ```[J,N]```, where ```J``` is the number of components, and ```N``` is the length of the signal. Each row of the array represents the estimation of the instantenous frequency of the signal.
 
- The shape and type of the output depends on the task.
-
-- For Denoising: The output must be a numpy array and have the same shape as the input.
-- For : The output must be a boolean variable where ```False``` indicates no presence of a signal, and ```True``` that a signal has been detected.
-
-In the following section, we will see how to create a class that compartmentalize your method and outline the instructions to run the benchmark.
