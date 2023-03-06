@@ -7,8 +7,8 @@ from benchmark_demo.benchmark_utils import MethodTemplate, MatlabInterface
 # (without the .m extension). Then get the matlab function as:
 
 # Paths to additional code for the method to add to Matlab path variable.
-paths = ['src\methods\dbrevdo_methods_utils',
-        '..\src\methods\dbrevdo_methods_utils'
+paths = ['src\methods\dbrevdo_method_utils',
+        '..\src\methods\dbrevdo_method_utils'
         ]
 
 mlint = MatlabInterface('brevdo_method', add2path=paths) 

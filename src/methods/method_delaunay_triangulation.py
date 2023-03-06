@@ -363,7 +363,7 @@ def delaunay_triangulation_denoising(signal,
                 'mask': mask.astype(bool),
                 'tri': tri,
                 'tri_select': tri_select,
-                'zeros': vertices,
+                'zeros': zeros,
                 'stft': stft,
                 'comps': comps,
                 'instf': instf}
