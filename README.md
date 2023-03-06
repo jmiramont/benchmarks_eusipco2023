@@ -131,9 +131,9 @@ class NewMethod(MethodTemplate):
 
 ```
 
-The constructor function ```__init__(self)``` must initialize the attributes ```self.id``` and ```self.task```. The first is a string to identify your method in the benchmark. The second is the name of the task your method is devoted to. This can be either ```'denoising'``` or ```'detection'```. Notice that if you fail to use such names this will prevent you from benchmarking your method.
+The constructor function ```__init__(self)``` must initialize the attributes ```self.id``` and ```self.task```. The first is a string to identify your method in the benchmark. The second is the name of the task your method is devoted to.
 
-Lastly, as anticipated above, you have to implement the class function ```method(self, signals, *args, **kwargs)```. This function may act as a wrapper of your method, i.e. you implement your method elsewhere and call it from this function passing all the parameters in the process, or you could implement it directly here.
+Lastly, you have to implement the class function ```method(self, signals, *args, **kwargs)```. This function may act as a wrapper of your method, i.e. you implement your method elsewhere and call it from this function passing all the parameters in the process, or you could implement it directly here.
 
 If you want to test your method using different sets of parameters, you can also implement the function `get_parameters()` to return a list with the desired input parameters (you can find an example of this [here](./new_method_example/method_new_with_parameters.py)).
 
@@ -172,15 +172,22 @@ from methods.benchmark_utils import MethodTemplate, MatlabInterface
 
 ```
 
-Then, you must  **move the ```.m``` with your method to the folder ```src\methods```**. After this you can now create a ```MatlabInterface``` instance that represents your method, by passing a string to the ```MatlabInterface``` creator. For example:
+Then, you must  **move the ```.m``` with your method to the folder ```src\methods```**. A convenient and ordered way of doing this is creating a folder with all the ```.m``` files related to your method, for example called ```new_method_utils```. After this you can now create a ```MatlabInterface``` instance that represents your method, by passing a string to the ```MatlabInterface``` creator. For example:
 
 ```python
 # After moving a file called 'my_matlab_method.m' to src\methods, create an interface with the matlab engine by passing the name of the function file (without the .m extension). Then get the matlab function as:
 mlint = MatlabInterface('my_matlab_method') 
 matlab_function = mlint.matlab_function # A python function handler to the method.
-```
 
-Now you are ready to complete the third section of the file. You can use this exactly as it is in the template file, provided you have done all the precedent steps.
+# Paths to additional code for the method to add to Matlab path variable.
+paths = [
+        'src\methods\new_method_utils',
+        '..\src\methods\new_method_utils'
+        ]
+```
+The last lines make sure that if you created a new folder named ```new_method_utils``` inside ```src\methods``` with the files related to your Matlab-implemented approach, these are available to the Matlab session.
+
+Now we are ready to complete the third section of the file. This can be used exactly as it is in the template file, provided you have done all the precedent steps.
 
 ```python
 class NewMethod(MethodTemplate):
@@ -202,6 +209,8 @@ class NewMethod(MethodTemplate):
         return signal_output
 
 ```
+
+The constructor function ```__init__(self)``` must initialize the attributes ```self.id``` and ```self.task```. The first is a string to identify your method in the benchmark. The second is the name of the task your method is devoted to.
 
 *Remark: The ```MatlabInterface``` class will cast the input parameters in the appropriate Matlab types.*
 
