@@ -13,10 +13,6 @@ through a comparative evaluation benchmark.
 Our numerical experiments show the specific scenarios where each method is the more adapted in terms of quality of mode separation and reconstruction
 while considering the computational efficiency.
 
-- [Benchmarking a new method](#benchmarking-a-new-method)
-- [Benchmarking your own method in your computer](#benchmarking-your-method-in-your-computer)
-- [Matlab-implemented methods](#matlab-implemented-methods)
-
 ## Relevant Files
 The folder [```notebooks```](notebooks) holds a number Python notebooks:
 
@@ -25,7 +21,14 @@ The folder [```notebooks```](notebooks) holds a number Python notebooks:
 
 Additionally, the directory [```src/methods```](src/methods) contains several folders where minimal working examples of the Matlab implemented methods can be found, each one named after their corresponding method (files ```mwe_*.m```).
 
+
+
+
 # Benchmarking a new method
+
+- [Benchmarking a new method](#benchmarking-a-new-method)
+- [Benchmarking your own method in your computer](#benchmarking-your-method-in-your-computer)
+- [Matlab-implemented methods](#matlab-implemented-methods)
 
 You can use this benchmark to test a new method against others.
 You can clone this repository and benchmark your own method locally, i.e. in your computer. This will allow you to run the benchmarks with all the modifications you want (exploring different parameters for you method, type of signals, number of repetitions, etc.).
