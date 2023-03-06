@@ -1,7 +1,9 @@
 # Benchmarks of Multi-Component Signal Analysis Methods
+
 This repository complements the article "Benchmarks of Multi-Component Signal Analysis Methods" by J.M. Miramont, Q. Legros, D. Fourer and F. Auger.
 
 ## Abstract 
+
 Non-stationary multicomponent signals are ubiquitous in real-world applications.
 They can be modeled as a superimposition of amplitude- and frequency-modulated components
 so-called the modes, which require dedicated techniques to be efficiently analyzed and disentangled.
@@ -14,15 +16,13 @@ Our numerical experiments show the specific scenarios where each method is the m
 while considering the computational efficiency.
 
 ## Relevant Files
+
 The folder [```notebooks```](notebooks) holds a number Python notebooks:
 
 - Summary of results and figures from the paper.
 - Minimal working examples of the methods used in the paper. 
 
 Additionally, the directory [```src/methods```](src/methods) contains several folders where minimal working examples of the Matlab implemented methods can be found, each one named after their corresponding method (files ```mwe_*.m```).
-
-
-
 
 # Benchmarking a new method
 
