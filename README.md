@@ -17,14 +17,13 @@ while considering the computational efficiency.
 - [Benchmarking your own method in your computer](#benchmarking-your-method-in-your-computer)
 - [Matlab-implemented methods](#matlab-implemented-methods)
 
-## Python examples
+## Relevant Files
+The folder [```notebooks```](notebooks) holds a number Python notebooks:
 
-The folder ```notebooks``` holds a number of minimal working examples of the methods explored in the benchmarks in the form of Python notebooks.
+- Summary of results and figures from the paper.
+- Minimal working examples of the methods used in the paper. 
 
-## MATLAB examples
-
-Inside the directory [```src/methods```](src/methods) there are several folders with the Matlab implementations, each one named after their corresponding method. There you can find files called  ```mwe_*.m``` with a minimal working example of each method. The Matlab functions that it are called from the Python-based benchmark always start with ```method_```.
-
+Additionally, the directory [```src/methods```](src/methods) contains several folders where minimal working examples of the Matlab implemented methods can be found, each one named after their corresponding method (files ```mwe_*.m```).
 
 # Benchmarking a new method
 
@@ -83,7 +82,7 @@ In the first section of the template file [*method_new_basic_template.py*](./new
 | Import here all the modules you need.
 | Remark: Make sure that neither of those modules starts with "method_".
 """
-from methods.benchmark_utils import MethodTemplate # Import the template!
+from methods.benchmark_utils import MethodTemplate # Import the template class!
 ```
 
 <!-- Additionally, the [abstract class](https://docs.python.org/3/library/abc.html) `MethodTemplate` is imported here. Abstract classes are not implemented, but they serve the purpose of establishing a template for new classes, by forcing the implementation of certain *abstract* methods. We will see later that the class that encapsulates your method must inherit from this template. -->
@@ -141,14 +140,14 @@ Finally, **you have to move the file** with all the modifications to the folder 
 Benchmarking matlab-based methods is possible thanks to the incorporated Matlab's python engine, that allows communication between python and a Matlab's session.
 
 The Matlab function implementing your method must have a particular signature. For example, for a method with two input parameters should be:
+
 ```matlab
-    function [X]  = a_new_method(signal, param_1, param_2):
-        ...
+    function [X]  = a_new_method(signal, param_1, param_2)
 ```
 
 Your method can have all the (positional) input arguments as you need.
 
-Matlab python's engine is only compatible with certain python versions, depending on the local Matlab version you are running. If you are interested in using the benchmark locally, i.e. in your computer, [check that your version of matlab and python are compatible](https://www.mathworks.com/content/dam/mathworks/mathworks-dot-com/support/sysreq/files/python-compatibility.pdf).
+Matlab's python engine is only compatible with certain Python versions, depending on the local Matlab installation you are running. [Check that your version of matlab and python are compatible](https://www.mathworks.com/content/dam/mathworks/mathworks-dot-com/support/sysreq/files/python-compatibility.pdf).
 
 Once you've checked your python and matlab versions are compatible, you can install the matlab engine in the [virtual environment created before](#installation-using-poetry) using poetry
 
@@ -156,9 +155,9 @@ Once you've checked your python and matlab versions are compatible, you can inst
 poetry install -E matlab_tools
 ```
 
-We now can see how to benchmark a method implemented in Matlab by slightly modifying the instructions given before to create the file that represents your method. A template file is given [here](./new_method_example/method_new_basic_template_matlab.py) for interested users. Let us highlight the main differences in this template.
+We now can see how to benchmark a method implemented in Matlab. A template file is given [here](./new_method_example/method_new_basic_template_matlab.py) for interested users.
 
-First, in the first section of the file, you must import the class ```MatlabInterface```, which will simply act as an interface between python and a Matlab session where your method will be run:
+In the first section of the file, the class ```MatlabInterface``` is imported, which will simply act as an interface between Python and a Matlab session where your method will be run:
 
 ```python
 
