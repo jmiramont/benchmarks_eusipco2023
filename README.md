@@ -28,15 +28,13 @@ Additionally, the directory [```src/methods```](src/methods) contains several fo
 # Benchmarking a new method
 
 You can use this benchmark to test a new method against others.
-You can clone this repository and **[benchmark your own method locally](#benchmarking-your-method-in-your-computer)**, i.e. in your computer. This will allow you to run the benchmark with all the modifications you want (exploring different parameters for you method, type of signals, number of repetitions, etc.).
+You can clone this repository and benchmark your own method locally, i.e. in your computer. This will allow you to run the benchmarks with all the modifications you want (exploring different parameters for you method, type of signals, number of repetitions, etc.).
 
 The [*notebooks*](./notebooks/) folder contains a number of minimal working examples to understand how this benchmark works and how you could use it for your project. In particular, [*demo_benchmark.ipynb*](./notebooks/demo_benchmark.ipynb) gives two minimal working examples to introduce the basic functionality of the `Benchmark` class, and the notebook [*demo_signal_bank.ipynb*](./notebooks/demo_signal_bank.ipynb) showcases the signals produced by the `SignalBank` class.
 
 The instructions below will help you to add a new method and run the benchmark afterwards.
 
-First you should have a local copy of this repository to add and modify files.
-For this, you can clon
-Open a terminal in a directory of your preference and use
+First you should have a local copy of this repository to add and modify files. Open a terminal in a directory of your preference and use
 
 ```bash
 git clone https://github.com/jmiramont/benchmarks_eusipco2023.git
@@ -257,7 +255,7 @@ to update the .lock file in the folder.
 
 *Remark: Notice that the use of ```poetry``` for adding the dependencies of your packet is key for running the benchmark using [GitHub Actions](./.github/workflows), please consider this while adding your method.*
 
-### Checking everything is in order with ```pytest```
+<!-- ### Checking everything is in order with ```pytest```
 
 Once your dependencies are ready, you should check that everything is in order using the ```pytest``` testing suit. To do this, simply run the following in a console located in your local version of the repository:
 
@@ -271,7 +269,7 @@ This will check a series of important points for running the benchmark online, m
 2. The inputs and outputs of your method follows the required format according to the designated task.
 
 Once the tests are passed, you can now either create a pull request to run the benchmark remotely, or [run the benchmark locally](#running-this-benchmark-locally).
-
+ -->
 
 ### Size of outputs according to the task
 The shape and type of the output depends on the task.
