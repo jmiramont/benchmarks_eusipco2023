@@ -26,7 +26,7 @@ Additionally, the directory [```src/methods```](src/methods) contains several fo
 
 # Benchmarking a new method
   - [Installation using ```poetry```](#installation-using-poetry)
-  - [Creating a file represententing a new method](#creating-a-file-represententing-a-new-method)
+  - [Adding a new method to benchmark](#adding-a-new-method-to-benchmark)
     - [Python-based methods](#python-based-methods)
     - [Matlab-based method](#matlab-based-method)
   - [Running the benchmark with new methods](#running-the-benchmark-with-new-methods)
@@ -65,7 +65,7 @@ conda config --set auto_activate_base false
 conda deactivate
 ```
 
-## Creating a file represententing a new method
+## Adding a new method to benchmark
 
 Whether your method is implemented in Python or Matlab, you must create a new ```.py``` file the name of which must start with *method_* and have certain content to be automatically discovered by the toolbox. The purpose of this file is to encapsulate your method in a new class. This is much easier than it sounds :). To make it simpler, [a file called *method_new_basic_template.py* is made available](./new_method_example/method_new_basic_template.py) (for Python users) which you can use as a template. You just have to fill in the parts that implement your method. Matlab users can also find a template [here](./new_method_example/method_new_basic_template_matlab.py).
 A new method can then be tested against others by adding this file into the folder [src/methods](./src/methods). We shall see how to do this using a template file in the following sections.
