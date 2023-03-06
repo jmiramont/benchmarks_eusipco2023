@@ -26,10 +26,7 @@ The folder [```notebooks```](notebooks) holds a number Python notebooks:
 Additionally, the directory [```src/methods```](src/methods) contains several folders where minimal working examples of the Matlab implemented methods can be found, each one named after their corresponding method (files ```mwe_*.m```).
 
 # Benchmarking a new method
-- [Benchmarks of Multi-Component Signal Analysis Methods](#benchmarks-of-multi-component-signal-analysis-methods)
-  - [Abstract](#abstract)
-  - [Relevant Files](#relevant-files)
-- [Benchmarking a new method](#benchmarking-a-new-method)
+
   - [Installation using ```poetry```](#installation-using-poetry)
   - [Adding a new method to benchmark](#adding-a-new-method-to-benchmark)
     - [Python-based methods](#python-based-methods)
