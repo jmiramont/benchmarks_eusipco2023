@@ -25,11 +25,6 @@ Additionally, the directory [```src/methods```](src/methods) contains several fo
 
 
 # Benchmarking a new method
-
-- [Benchmarks of Multi-Component Signal Analysis Methods](#benchmarks-of-multi-component-signal-analysis-methods)
-  - [Abstract](#abstract)
-  - [Relevant Files](#relevant-files)
-- [Benchmarking a new method](#benchmarking-a-new-method)
   - [Installation using ```poetry```](#installation-using-poetry)
   - [Creating a file represententing a new method](#creating-a-file-represententing-a-new-method)
     - [Python-based methods](#python-based-methods)
