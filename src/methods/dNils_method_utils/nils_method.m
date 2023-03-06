@@ -1,4 +1,4 @@
-function xr = nils_method(x, Ncomp, M, approach, sigma_s, clwin, return_comps,return_freq)
+function [xr,if2] = nils_method(x, Ncomp, M, approach, sigma_s, clwin, return_comps,return_freq)
 
 N = length(x);
 
@@ -48,6 +48,8 @@ xr = sum(X);
 if return_comps
     xr = X;
 end
+
+if2 = IF_MB/M;
 
 if return_freq
     xr = IF_MB/M;

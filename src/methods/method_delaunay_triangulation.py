@@ -269,14 +269,21 @@ def delaunay_triangulation_denoising(signal,
 
     # Set parameters
     N = len(signal)
+    
     if Nfft is None:
         Nfft = 2*N
 
+
+    x = signal
+
     g, T = get_round_window(Nfft)
-    signal_pad = np.zeros(2*N,)
-    signal_pad[N//2:N//2+N] = signal
+    L = int(N+2*T)
+    tmin = int(T)
+
+    signal_pad = np.zeros(L,)
+    signal_pad[tmin:tmin+N] = x
     stft = get_stft(signal_pad, window = g, Nfft=Nfft)
-    stft = stft[:,N//2:N//2+N]
+    stft = stft[:,tmin:tmin+N]
     # Computes the spectrogram and its zeros.
     S = np.abs(stft[0:Nfft//2+1,:])**2
     zeros = find_zeros_of_spectrogram(S)
@@ -293,7 +300,9 @@ def delaunay_triangulation_denoising(signal,
         valid_zeros[(T<zeros[:,0])]=True 
 
     # Normalize the position of zeros
-    vertices = zeros/T # Normalize
+    vertices = zeros.copy()
+    vertices[:,0] = vertices[:,0]/T # Normalize
+    vertices[:,1] = vertices[:,1]/T # Normalize
 
     # Compute Delaunay triangulation.
     delaunay_graph = Delaunay(zeros)
@@ -354,7 +363,7 @@ def delaunay_triangulation_denoising(signal,
                 'mask': mask.astype(bool),
                 'tri': tri,
                 'tri_select': tri_select,
-                'zeros': zeros,
+                'zeros': vertices,
                 'stft': stft,
                 'comps': comps,
                 'instf': instf}

@@ -6,12 +6,12 @@ verbosity: 4
 using_signals: [ #'LinearChirp','CosChirp',]      # Single-component signals
 #                #'ToneSharpAttack', ToneDumped,  # Dumped and Sharps attacks
                 'McDampedCos',
-                'McCrossingChirps',             # Crossing-components  
+                # 'McCrossingChirps',             # Crossing-components  
                 # 'McMultiLinear', 
                 # 'McMultiLinear2',             # Multi-Component signals  
 #                 'McMultiCos2',                # Multi-Component Non-Harmonic    
                 # 'McSyntheticMixture',
-                'McSyntheticMixture5',
+                # 'McSyntheticMixture5',
                 # 'McSyntheticMixture2',
                 # 'McSyntheticMixture3',
                 # 'McSyntheticMixture4',

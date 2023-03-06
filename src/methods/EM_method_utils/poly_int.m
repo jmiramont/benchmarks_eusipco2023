@@ -1,4 +1,4 @@
-function tf = poly_int(muc)
+function tf = poly_int(muc,step_r)
 
 [N,Ns]=size(muc);
 tf = zeros(size(muc));
@@ -12,10 +12,9 @@ for ns = 1:Ns % for loop on components
     ind2(ns) = [];
     for ns2 = ind2 % loop on components other than Ns
         win_close(:,ns) = abs(muc(:,ns) - muc(:,ns2)); % store abs differences
-        temp(win_close(:,ns)<10,ns) = 0;
+        temp(win_close(:,ns)<2*(step_r),ns) = 0;
     end
 end
-
 
 
 for ns=1:Ns

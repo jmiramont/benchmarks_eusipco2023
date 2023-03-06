@@ -21,6 +21,7 @@ function [W_out,P,Mu_out]=Mod_Estim_W_EM_multi(Y,Fct,Ns,step_Nx,reg_mu,c,step_r,
 
 
 %% Initialization
+Y = Y./sum(Y,2);
 [N,M]=size(Y);% nb of time bins x nb of frequency bins
 Nx=size(Fct,2); % nb of admissible frequencies
 Nz = Nx/step_Nx; % subsampling the frequency grid for first iterations -> speed up the estimation
@@ -57,7 +58,7 @@ err0 = 10e9;
 derr = 10e9;
 errold = 10e9;
 
-while ((m_compt<=10 && derr>1e-3 && err0>1e-10) || m_compt<=10)
+while ((m_compt<=20 && derr>1e-3 && err0>1e-10) || m_compt<=20)
     %% E-step
 %     disp(['EM iteration : ',num2str(m_compt)])
     if (strcmp(reg_mu,'TV') ||(strcmp(reg_mu,'Lap'))) % TV or Lap regularization on mu
@@ -132,7 +133,7 @@ end
 W_out = W_out ./ iteEM; % mean of the (N_iter-N_bi) iterations
 
 if bolpol
-    Mu_out = poly_int(muc);
+    Mu_out = poly_int(muc,step_r);
 end
 
 

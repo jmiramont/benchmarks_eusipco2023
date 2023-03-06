@@ -1,4 +1,4 @@
-function [xr,mask_total] = em_method(x,Ncomp,M,L,c, step_r, step_v, return_comps, return_freq)
+function [xr,tf2,mask_total] = em_method(x,Ncomp,M,L, Pnei, step_r, step_v, return_comps, return_freq)
 % This function is called from the (python based) benchmark.
 % It wraps the EM method and parameters (this of course can be modified).
 %--------------------------------------------------------------------------
@@ -21,12 +21,16 @@ if ~exist('c', 'var') || isempty(c)
     c=1e-4; % TV regularization parameter
 end
 
+if ~exist('Pnei', 'var') || isempty(Pnei)
+    Pnei=48;
+end
+
 if ~exist('step_r', 'var') || isempty(step_r)
-    step_r= 27; 
+    step_r= 3*ceil(sqrt(M/(pi*L)))+1; 
 end
 
 if ~exist('step_v', 'var') || isempty(step_v)
-    step_v= 100;
+    step_v= 4*step_r;
 end
 
 % if ~exist('cl', 'var')
@@ -74,14 +78,13 @@ M2 = floor(M/2);
 Spect = abs(tfr(1:M2,:)).^2;
 
 
-Ns = 1;
-[Fct]=comp_Fc(M,L)+eps; %% Data distribution
-[W_out,P,tf]=Mod_Estim_W_EM_multi((Spect.^2)',Fct,Ncomp,1      ,reg_mu,c,step_r,step_v,ifplot,1);
-%                                (Y          ,Fct,Ns   ,step_Nx,reg_mu,c,step_r,step_v,ifplot,bolpol)
+% Ns = 1;
+[Fct]=(comp_Fc(M,L))+eps; %% Data distribution
+[W_out,P,tf]=Mod_Estim_W_EM_multi(Spect',Fct,Ncomp,1,reg_mu,c,step_r,step_v,ifplot,1);
 
 
-delta_m = 14;
-%% EM algorithm
+%% EM algorithm mask
+delta_m = Pnei;
 mask_total = 0;
 for c = 1:Ncomp
 
@@ -100,17 +103,18 @@ for c = 1:Ncomp
 %      figure;
 %      imagesc(abs(tfr) .* mask)
 %      pause
-    
     x_hat(:,c) = real(rectfrgab(tfr .* mask, L, M));
 end
 x_hat = x_hat(z0:z1,:);
 
-% Generate a combined mask of all components and invert the masked STFT.
+% Generate a combined mask of all components and invert the masked STFT to
+% obtain a reconstruction of the signal.
 mask_total(mask_total~=0) = 1;
-% xr = real(rectfrgab(tfr .* mask_total, L, M));
+xr = real(rectfrgab(tfr .* mask_total, L, M));
 
-% Sum the components to generate the output signal.
-xr = sum(x_hat,2).';
+% Sum the components to generate the output signal -> JMM 27/02: This is a
+% problem when the individual masks overlap!
+% xr = sum(x_hat,2).';
 
 % If return_comps is True, then return the components insted of the signal.
 if return_comps
@@ -118,6 +122,7 @@ if return_comps
 end
 
 % If return_freq is True, then return the components' IF
+tf2 = tf.'/M;
 if return_freq
     xr = tf.'/M;
 end

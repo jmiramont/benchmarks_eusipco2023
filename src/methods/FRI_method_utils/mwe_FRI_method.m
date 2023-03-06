@@ -3,17 +3,16 @@ close all
 folder = './';
 %% required paths 
 addpath(folder);
-addpath(['signals_mat']);
+addpath(['../signals_mat']);
 addpath(strcat([folder 'tools']));
 addpath(strcat([folder 'synchrosqueezedSTFT']));
 addpath(strcat([folder 'FRI_lib']));
 
 %% Import signal from file
-load McCosPlusTone.mat
 % load McCrossingChirps.mat
 % load McSyntheticMixture2.mat
-% load McOnOff2.mat
-N = length(x); % The signal has 1024 samples.
+load McDampedCos.mat
+N = length(x); % The signal has 1024 samples0.
 x = x.';
 Ncomp = double(Ncomp);
 
@@ -41,7 +40,8 @@ legend()
 
 %% Apply the method again, but recover separate components.
 % xr = em_method(x,Ncomp,M,L,c,cl,step_Nx,stepg,seuil,return_comps)
-X = fri_method(xn,Ncomp,[],[],[],[],[],true);
+xr = fri_method(xn,Ncomp,M,L,Pnei,M0,Method,return_comps, return_freq);
+
 
 %%
 % Show the original signal components and the recovered ones (not ordered

@@ -9,8 +9,8 @@ addpath('./tools')
 to_optimize = 'separability'; %'denoising'
 
 
-nval1 = 20;
-nval2 = 20;
+nval1 = 10;
+nval2 = 10;
 
 v1_min = 1;
 v1_max = 100;
@@ -30,8 +30,8 @@ addpath(strcat([folder 'tools']));
 addpath(strcat([folder 'synchrosqueezedSTFT']));
 
 %% Import signal from file
- load McCrossingChirps.mat
-%load McSyntheticMixture5.mat
+% load McCrossingChirps.mat
+load McSyntheticMixture5.mat
 % load McDampedCos.mat
 
 N = length(x); % The signal has 1024 samples.
@@ -51,7 +51,7 @@ X0 = comps.';
 % Contaminate the signal with real Gaussian white noise.
 rng(0);
 noise = randn(N,1);
-SNRin = -20;
+SNRin = 10;
 xn = sigmerge(x, noise, SNRin);
 
 v1_rng = linspace(v1_min,v1_max, nval1);
@@ -62,54 +62,64 @@ best_qrf = -inf;
 qrf = zeros([nval1,nval2]);
 for i = 1:nval1
     parfor j = 1:nval2
-      step_r = round(v1_rng(i));
-      step_v = round(v2_rng(j));
-      %% Apply EM method with default parameters
-      %20 / 60 works
-      [X] = em_method(xn,Ncomp,[],[],[],step_r, step_v, true);
-      xr  = sum(X.',2);
+        step_r = round(v1_rng(i));
+        step_v = round(v2_rng(j));
+        % Apply EM method with default parameters
+        %20 / 60 works
+        [X] = em_method(xn,Ncomp,[],[],[],step_r, step_v, true);
+%         xr  = sum(X.',2);
 
-      %% Compute the QRF for the whole signal.
-      
-      if to_optimize == 'separability'
-        rqf_tmp = 0;
-        [ I ] = match_components(comps, X);
-        for k = 1:Ncomp
-          rqf_tmp = rqf_tmp+RQF(comps(k,:),X(I(k),:));
-        end
-        rqf_tmp = rqf_tmp/Ncomp;
-        qrf(i,j) = rqf_tmp;
-      else
-		qrf(i,j) = RQF(x,xr);
-	  end
+        % Compute the QRF for the whole signal.
+
+        if to_optimize == 'separability'
+            rqf_tmp = 0;
+            [ I ] = match_components(comps, X);
+            for k = 1:Ncomp
+                rqf_tmp = rqf_tmp+RQF(comps(k,:),X(I(k),:));
+            end
+            rqf_tmp = rqf_tmp/Ncomp;
+            qrf(i,j) = rqf_tmp;
+        else
+    		qrf(i,j) = RQF(x,xr);
+  	  end
       qrf(i,j)
-      
-%       if qrf > best_qrf
-%         best_v = [step_r step_v]
-%         best_qrf = qrf
-%         
-%         rqf_res(i,j) = qrf;
-%       end
+
     end
 end
 
+save('variables.mat')
+
+for i = 1:nval1
+    for j = 1:nval2
+        step_r = round(v1_rng(i));
+        step_v = round(v2_rng(j));
+        if qrf(i,j) > best_qrf
+            best_v = [step_r step_v];
+            best_qrf = qrf(i,j);
+        end
+    end
+end
+
+
+
+%%
 figure
-imagesc(v1_rng,v2_rng, rqf_res)
+imagesc(v1_rng,v2_rng, qrf)
 hold on
-plot(best_v(1),best_v(2), 'kx')
-xlabel('step_r')
-ylabel('step_v')
+plot(best_v(2),best_v(1), 'kx')
+ylabel('step_r')
+xlabel('step_v')
 
 %% Compare recovered signal and the original (denoised) one.
 figure();
 plot(xr,'k','DisplayName','Recovered signal');
-hold on; 
-plot(x,'--g','DisplayName','Original signal'); 
+hold on;
+plot(x,'--g','DisplayName','Original signal');
 legend()
 
 
 %%
-[H, L] = roundgauss(2*N); 
+[H, L] = roundgauss(2*N);
 
 % Show the original signal components and the recovered ones (not ordered
 % by similarity).
@@ -120,7 +130,7 @@ for i=1:Ncomp
     S = tfrsp(real(X0(:,i)),1:N,2*N,H);
     imagesc(S(1:N+1,:));
     title('Original Component: '+string(i));
-    
+
     subplot(Ncomp+1,2,2*i);
     S = tfrsp(X(i,:).',1:N,2*N,H);
     imagesc(S(1:N+1,:));

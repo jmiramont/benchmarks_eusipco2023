@@ -53,7 +53,7 @@ xr = nils_method(xn, Ncomp,[],1); % 1 = SR, 2 = LCR
 %% Compute the QRF for the whole signal.
 % qrf = RQF(x,xr);
 qrf = 20*log10(norm(x(100:end-100))/norm(x(100:end-100)-xr(100:end-100).'));
-X = nils_method(xn, Ncomp, [],[],[],[],true);
+[X,tf] = nils_method(xn, Ncomp, [],[],[],[],true);
 
 %% Compare recovered signal and the original (denoised) one.
 figure();

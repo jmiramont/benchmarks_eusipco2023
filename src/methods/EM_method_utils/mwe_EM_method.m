@@ -4,14 +4,15 @@ clear
 %% required paths
 folder = './';
 addpath(folder);
-addpath(['signals_mat']);
+addpath(['../signals_mat']);
 addpath(strcat([folder 'tools']));
+addpath(strcat([folder 'mfiles']));
 addpath(strcat([folder 'synchrosqueezedSTFT']));
 
 %% Import the signals used in the paper
-load McCrossingChirps.mat
+% load McCrossingChirps.mat
 % load McSyntheticMixture5.mat
-% load McDampedCos.mat
+load McDampedCos.mat
 
 N = length(x); % The signal has 1024 samples.
 x = x.';
@@ -30,31 +31,36 @@ X0 = comps.';
 % Contaminate the signal with real Gaussian white noise.
 rng(0);
 noise = randn(N,1);
-SNRin = 20;
+SNRin = 10;
 xn = sigmerge(x, noise, SNRin);
+
 
 
 %% Apply EM method with default parameters
 %best RQF for Crossing Chirps.
-% step_r= 27; step_v=100;
 
-%best RQF for SyntheticMixture5
-% step_r= 34; step_v=100;
+M = N;
+M2 = floor(M/2);
+L = 20;
 
-%best RQF for DampedCos.
-% step_r= 34; step_v=45;
+step_r= 3*ceil(sqrt(M/(pi*L)))+1; 
+step_v= 4*step_r;
+Pnei = floor(6*M/2/pi/L);
 
+% Best for Crossing Chirps
+% step_r= 34; step_v=78;
 
-%% best mask
-step_r = [];
-step_v = [];
-% xr = em_method(x,Ncomp,M,L,c, step_r, step_v, return_comps, return_freq)
+% Best for Synthetic Mixture
+% step_r= 34; step_v=56;
+
 tic()
-[X] = em_method(xn,Ncomp,[],[],[], step_r, step_v, true);
+[X,tf] = em_method(xn,Ncomp, M, L, [], step_r, step_v, true);
 toc()
-xr = sum(X.',2);
+[xr,~,mask] = em_method(xn,Ncomp, M, L, Pnei, step_r, step_v);
+
 
 %% Compute the QRF for the whole signal.
+ [ I, s ] = match_components(comps, X);
 qrf = RQF(x,xr);
 %qrf = 20*log10(norm(x(100:end-100))/norm(x(100:end-100)-xr(100:end-100).'));
 
@@ -67,7 +73,7 @@ legend()
 
 
 %%
-[H, L] = roundgauss(2*N); 
+[H, L] = roundgauss(2*N);
 
 % Show the original signal components and the recovered ones (not ordered
 % by similarity).
@@ -75,13 +81,14 @@ legend()
 figure();
 for i=1:Ncomp
     subplot(Ncomp+1,2,2*i-1);
-    S = tfrsp(real(X0(:,i)),1:N,2*N,H);
-    imagesc(S(1:N+1,:));
+    S = tfrsp(real(X0(:,I(i))),1:N,2*N,H);
+    imagesc(S(1:N+1,:)); hold on;
     title('Original Component: '+string(i));
     
     subplot(Ncomp+1,2,2*i);
     S = tfrsp(X(i,:).',1:N,2*N,H);
-    imagesc(S(1:N+1,:));
+    imagesc(S(1:N+1,:)); hold on;
+    plot(tf(i,:)*2*N,'r');
     title('Recovered Component: '+string(i));
 end
 
@@ -94,3 +101,14 @@ subplot(Ncomp+1,2,2*Ncomp+2)
 S = tfrsp(sum(X).',1:N,2*N,H);
 imagesc(S(1:N+1,:));
 title('Sum of Recovered Components: '+string(i));
+
+figure()
+S = tfrsp(sum(real(X0),2),1:N,2*N,H);
+imagesc(S(1:N+1,:));
+title('Sum of Original Components: '+string(i));
+
+figure()
+imagesc(mask(1:M/2+1,:));
+
+
+

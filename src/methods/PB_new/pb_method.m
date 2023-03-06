@@ -54,7 +54,7 @@ if nargin<13 || isempty(return_instf)
     return_instf = false;
 end
 
-detect = 1;
+detect = 0;
 ifplot =  0;
 
 % Tfr parameter

@@ -24,7 +24,7 @@ def get_gauss_window(Nfft,L,prec=1e-6):
     g=g/np.linalg.norm(g)
     return g
 
-def get_round_window(Nfft, prec = 1e-6):
+def get_round_window(Nfft, prec = 1e-15):
     """ Generates a round Gaussian window, i.e. same essential support in time and 
     frequency: g(n) = exp(-pi*(n/T)^2) for computing the Short-Time Fourier Transform.
     
