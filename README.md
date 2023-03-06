@@ -32,7 +32,7 @@ Additionally, the directory [```src/methods```](src/methods) contains several fo
   - [Running the benchmark with new methods](#running-the-benchmark-with-new-methods)
   - [Changing the benchmark configuration](#changing-the-benchmark-configuration)
   - [Adding dependencies](#adding-dependencies)
-    - [Size of outputs according to the task](#size-of-outputs-according-to-the-task)
+  - [Size of outputs according to the task](#size-of-outputs-according-to-the-task)
 
 You can use this benchmark to test a new method against others.
 You can clone this repository and benchmark your own method locally, i.e. in your computer. This will allow you to run the benchmarks with all the modifications you want (exploring different parameters for you method, type of signals, number of repetitions, etc.).
@@ -79,7 +79,7 @@ First, the function implementing your method must have the following signature i
         ...
 ```
 
-Methods should receive an ```(N,)``` numpy array representing a discrete-time signal, where and `N` is the number of time samples. Additionally, they should receive a variable number of input arguments to allow testing different combinations of input parameters.
+Methods should receive an ```(N,)``` numpy array representing a discrete-time signal, where and `N` is the number of time samples. Additionally, they should receive a variable number of input arguments to allow testing different combinations of input parameters. The ouput of the function must be a ```numpy``` array of [predefined dimensions according to the task.](#size-of-outputs-according-to-the-task)
 
 In the first section of the template file [*method_new_basic_template.py*](./new_method_example/method_new_basic_template.py), you can import a function with your method or implement everything in the same file:
 
@@ -143,7 +143,7 @@ Finally, **you have to move the file** with all the modifications to the folder 
 
 ### Matlab-based method
 
-Benchmarking Matlab-implemented methods is possible thanks to the incorporated Matlab's python engine, that allows communication between python and a Matlab's session.
+Benchmarking Matlab-implemented methods is possible thanks to the incorporated [Matlab's Python engine](https://fr.mathworks.com/help/matlab/matlab-engine-for-python.html), that allows communication between python and a Matlab's session.
 
 The Matlab function implementing your method must have a particular signature. For example, for a method with two input parameters should be:
 
@@ -151,11 +151,11 @@ The Matlab function implementing your method must have a particular signature. F
     function [X]  = a_new_method(signal, param_1, param_2)
 ```
 
-Your method can have all the (positional) input arguments you need.
+Your method can have all the (positional) input arguments you need. The ouput of the function must be a Matlab matrix of [predefined dimensions according to the task.](#size-of-outputs-according-to-the-task)
 
-Matlab's python engine is only compatible with certain Python versions, depending on the local Matlab installation you are running. [Check that your version of matlab and python are compatible](https://www.mathworks.com/content/dam/mathworks/mathworks-dot-com/support/sysreq/files/python-compatibility.pdf).
+Matlab's Python engine is only compatible with certain Python versions, depending on the local Matlab installation you are running. [Check that your versions of matlab and Python are compatible](https://www.mathworks.com/content/dam/mathworks/mathworks-dot-com/support/sysreq/files/python-compatibility.pdf).
 
-Once you've checked your python and matlab versions are compatible, you can install the matlab engine in the [virtual environment created before](#installation-using-poetry) using poetry
+Once you've checked your Python and Matlab versions are compatible, you can install the matlab engine in the [virtual environment created before](#installation-using-poetry) using poetry
 
 ```bash
 poetry install -E matlab_tools
@@ -270,8 +270,6 @@ poetry update
 
 to update the .lock file in the folder.
 
-*Remark: Notice that the use of ```poetry``` for adding the dependencies of your packet is key for running the benchmark using [GitHub Actions](./.github/workflows), please consider this while adding your method.*
-
 <!-- ### Checking everything is in order with ```pytest```
 
 Once your dependencies are ready, you should check that everything is in order using the ```pytest``` testing suit. To do this, simply run the following in a console located in your local version of the repository:
@@ -288,7 +286,7 @@ This will check a series of important points for running the benchmark online, m
 Once the tests are passed, you can now either create a pull request to run the benchmark remotely, or [run the benchmark locally](#running-this-benchmark-locally).
  -->
 
-### Size of outputs according to the task
+## Size of outputs according to the task
 The shape and type of the output depends on the task.
 - For Denoising: The output must be a vector array with the same length as the signal.
 - For Mode Retreival: The output must be an array of size ```[J,N]```, where ```J``` is the number of components, and ```N``` is the length of the signal.
