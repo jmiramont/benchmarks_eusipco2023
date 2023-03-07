@@ -8,7 +8,8 @@ clear all; close all;
 % Load the signal
 load batsig.mat
 %fs = 1/7e-6;
-x = batsig-mean(batsig);
+% x = batsig-mean(batsig);
+x = batsig;
 Ncomp = 3;
 %% Spectrogram:
 N = length(x);
@@ -32,10 +33,13 @@ imagesc(mask_EM);
 save('mask_EM.mat','mask_EM')
 
 %% PB method
-addpath('../../src/methods/PB_new/')
-[~,mask] = pb_method(x, Ncomp, false, [], 0.7, 0.3, [], 15, [], [], [], [],true);
+addpath('../../src/methods/PB_method_utils/')
+[tf,mask] = pb_method(x, Ncomp, false, [], 0.7, 0.3, [], 15, [], [], [], [],true);
 mask_PB = mask(1:N/2,:);
 figure()
-imagesc(mask_PB);
+imagesc(flipud(mask_PB)); hold on;
+plot((0.5-tf(1,:))*N,'-r');
+plot((0.5-tf(2,:))*N,'-r');
+plot((0.5-tf(3,:))*N,'-r');
 save('mask_PB.mat','mask_PB')
 

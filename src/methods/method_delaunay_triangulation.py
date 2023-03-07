@@ -335,7 +335,8 @@ def delaunay_triangulation_denoising(signal,
                                                         min_group_size=min_group_size,
                                                         q = q)
     else:
-        mask = mask_triangles3(S, tri_select, zeros)  
+        mask = mask_triangles3(S, tri_select, zeros)
+        masks_of_each_group = 0  
 
     # If just the mask is required
     if return_mask:
@@ -366,7 +367,9 @@ def delaunay_triangulation_denoising(signal,
                 'zeros': zeros,
                 'stft': stft,
                 'comps': comps,
-                'instf': instf}
+                'instf': instf,
+                'group_masks': masks_of_each_group,
+                }
     else:
         return signal_r
 

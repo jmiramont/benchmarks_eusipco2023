@@ -98,7 +98,7 @@ for c = 1:Ncomp
         m0 = max(1,tf(n,c)-delta_m);
         m1 = min(tf(n,c)+delta_m, M2);
         
-        xx(m0:m1,n) = 1; %W_out(n);
+        xx(m0:m1,n) = c; %W_out(n);
     end
     
     mask = [xx;xx(end:-1:1,:)];
@@ -107,14 +107,14 @@ for c = 1:Ncomp
 %      figure;
 %      imagesc(abs(tfr) .* mask)
 %      pause
-    x_hat(:,c) = real(rectfrgab(tfr .* mask, L, M));
+    x_hat(:,c) = real(rectfrgab(tfr .* logical(mask), L, M));
 end
 x_hat = x_hat(z0:z1,:);
 
 % Generate a combined mask of all components and invert the masked STFT to
 % obtain a reconstruction of the signal.
-mask_total(mask_total~=0) = 1;
-xr = real(rectfrgab(tfr .* mask_total, L, M));
+% mask_total(mask_total~=0) = 1;
+xr = real(rectfrgab(tfr .* logical(mask_total), L, M));
 
 % Sum the components to generate the output signal -> JMM 27/02: This is a
 % problem when the individual masks overlap!

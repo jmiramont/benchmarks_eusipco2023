@@ -72,27 +72,34 @@ end
 % Apply the method and generate a mask per component
 [mask,instf] = pseudoBay(tfr, Ncomp, M, L, div, beta, alpha, ds, Pnei, ifplot, detect, PneiMask);
 % [mask,instf] = pseudoBay_sst(tfr, Ncomp, M, L, div, beta, alpha, ds, Pnei, ifplot, detect, PneiMask);
-
+mask_total = mask(:,:,1);
+for k =2:size(mask,3)
+    idx = mask(:,:,k-1) & mask(:,:,k);
+    mask(:,:,k) = mask(:,:,k)*k;
+    mask_total = mask_total + mask(:,:,k);
+    mask_total(idx) = k-1;    
+end
 
 % Generate a combined mask of all components.
-mask_total = sum(mask,3);
-mask_total(mask_total~=0) = 1;
+% mask_total = sum(mask,3);
+% mask_total(mask_total~=0) = 1;
 
 % Recover components and signal
 x_hat = zeros(N,Ncomp);
 
 % Inversion of the masked STFT.
 for c = 1:Ncomp
-    x_hat(:,c) = real(reconstruct_func(tfr .* mask(:,:,c), L, M));
+    x_hat(:,c) = real(reconstruct_func(tfr .* logical(mask(:,:,c)), L, M));
     %     [xr,~] = tfristft(tfr .* mask(:,:,c),1:N,w,0);
 end
+
 
 %%%%%%%%%%%%%%%%%%
 % Here I compare the different modes, and reorganize the output matrix to
 % make it correspond to the ground truth.
 
 % Return reconstructed signal by summing the components.
-xr = real(reconstruct_func(tfr .* mask_total, L, M));
+xr = real(reconstruct_func(tfr .* logical(mask_total), L, M));
 % xr = sum(x_hat,2).';
 
 if return_comps
