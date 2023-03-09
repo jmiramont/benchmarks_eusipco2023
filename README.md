@@ -36,8 +36,8 @@ Additionally, the directory [```src/methods```](src/methods) contains several fo
   - [Adding dependencies](#adding-dependencies)
   - [Size of outputs according to the task](#size-of-outputs-according-to-the-task)
 
-You can use this benchmark to test a new method against others.
-You can clone this repository and benchmark your own method locally, i.e. in your computer. This will allow you to run the benchmarks with all the modifications you want (exploring different parameters for you method, type of signals, number of repetitions, etc.).
+You can use the code in this repository to test a new method against others, which is based on the freely-available, Python-based, [benchmarking toolbox introduced here.](https://github.com/jmiramont/benchmark-test)
+You can clone this repository and benchmark your own method locally, i.e. in your computer. This will allow you to run the benchmarks with all the modifications you want (exploring different parameters, type of signals, number of repetitions, etc.).
 
 The [*notebooks*](./notebooks/) folder contains a number of minimal working examples to understand how this benchmark works and how you could use it for your project. In particular, [*demo_benchmark.ipynb*](./notebooks/demo_benchmark.ipynb) gives two minimal working examples to introduce the basic functionality of the `Benchmark` class, and the notebook [*demo_signal_bank.ipynb*](./notebooks/demo_signal_bank.ipynb) showcases the signals produced by the `SignalBank` class.
 
@@ -150,7 +150,7 @@ Benchmarking Matlab-implemented methods is possible thanks to the incorporated [
 The Matlab function implementing your method must have a particular signature. For example, for a method with two input parameters should be:
 
 ```matlab
-    function [X]  = a_new_method(signal, param_1, param_2)
+    function [X]  = a_matlab_method(signal, param_1, param_2)
 ```
 
 Your method can have all the (positional) input arguments you need. The ouput of the function must be a Matlab matrix of [predefined dimensions according to the task.](#size-of-outputs-according-to-the-task)
@@ -173,12 +173,13 @@ from methods.benchmark_utils import MethodTemplate, MatlabInterface
 # You must import the MethodTemplate abstract class and the MatlabInterface class.
 
 ```
+*Remark: Do not modify the abstract class `MethodTemplate`*.
 
-Then, you must  **move the ```.m``` with your method to the folder ```src\methods```**. A convenient and ordered way of doing this is creating a folder with all the ```.m``` files related to your method, for example called ```new_method_utils```. After this you can now create a ```MatlabInterface``` instance that represents your method, by passing a string to the ```MatlabInterface``` creator. For example:
+Then, you must  **move the ```.m``` file with your method to the folder ```src\methods```**. A convenient and neat way of doing this is by creating a folder with all the ```.m``` files related to your method, for example called ```a_matlab_method_utils```. After this you can now create a ```MatlabInterface``` instance that represents your method, by passing a string to the ```MatlabInterface``` creator with the name of the previously defined function. For example:
 
 ```python
-# After moving a file called 'my_matlab_method.m' to src\methods, create an interface with the matlab engine by passing the name of the function file (without the .m extension). Then get the matlab function as:
-mlint = MatlabInterface('my_matlab_method') 
+# After moving a file called 'a_matlab_method.m' to src\methods, create an interface with the Matlab's Python engine by passing the name of the file (without the .m extension). Then get the matlab function as:
+mlint = MatlabInterface('a_matlab_method') 
 matlab_function = mlint.matlab_function # A python function handler to the method.
 
 # Paths to additional code for the method to add to Matlab path variable.
