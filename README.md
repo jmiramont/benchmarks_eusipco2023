@@ -57,7 +57,8 @@ In order to install the benchmarking tool, open a terminal in the directory wher
 ```bash
 poetry install
 ```
-Benchmarking Matlab-implemented methods is possible thanks to the incorporated [Matlab's Python engine](https://fr.mathworks.com/help/matlab/matlab-engine-for-python.html), that allows communication between python and a Matlab's session. Matlab's Python engine is only compatible with certain Python versions, depending on the local Matlab installation you are running. [Check that your versions of matlab and Python are compatible](https://www.mathworks.com/content/dam/mathworks/mathworks-dot-com/support/sysreq/files/python-compatibility.pdf).
+Benchmarking Matlab-implemented methods is possible thanks to the incorporated [Matlab's Python engine](https://fr.mathworks.com/help/matlab/matlab-engine-for-python.html), that allows communication between python and a Matlab's session. This module's version must be compatible with your local Matlab installation, please  [modify the dependencies for this package accordingly](#adding-dependencies).
+Additionally, Matlab's Python engine is only compatible with certain Python versions, depending on the local Matlab installation you are running. [Check that your versions of matlab and Python are compatible](https://www.mathworks.com/content/dam/mathworks/mathworks-dot-com/support/sysreq/files/python-compatibility.pdf).
 
 
 *Remark for conda users:*
@@ -247,6 +248,7 @@ python = ">=3.8,<3.11"
 numpy = "^1.22.0"
 matplotlib = "^3.5.1"
 pandas = "^1.3.5"
+
 ```
 
 A more convenient and interactive way to do this interactively is by using ```poetry```, for example:
@@ -264,6 +266,29 @@ poetry update
 ```
 
 to update the .lock file in the folder.
+
+### Modify ```matlabengine``` module version
+
+Check the version of the ```matlabengine``` module you have to install to use run the benchmarks in the next table:
+
+| Matlab Version | Python Version | ```matlabengine``` version |   |
+|----------------|----------------|----------------------------|---|
+| 2022b          | 3.8, 3.9, 3.10 | 9.13.16                    |   |
+| 2022a          | 3.8, 3.9       | 9.12.17                    |   |
+| 2021b          | 3.7, 3.8, 3.9  | 9.11.19                    |   |
+
+Then, look for the ```matlabengine``` line in [```pyproject.toml```](./pyproject.toml), it should look like this:
+
+```python
+matlabengine = "9.12.17"
+```
+Make sure to change the version with the one corresponding to your Python and Matlab current versions. If you have an older version of Matlab or Python, you can search for the correct version of the ```matlabengine``` module [here](https://pypi.org/project/matlabengine/#history).
+
+Afer this, run
+
+```bash
+poetry update
+```
 
 <!-- ### Checking everything is in order with ```pytest```
 
