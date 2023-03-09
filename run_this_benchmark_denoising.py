@@ -53,7 +53,7 @@ if __name__ == "__main__":
     if 'add_new_methods' in config.keys():
         if config['add_new_methods']:
             
-            filename = 'results\last_benchmark'
+            filename = 'results\last_benchmark_denoising'
             with open(filename + '.pkl', 'rb') as f:
                 benchmark = pickle.load(f)
             benchmark.add_new_method(config['methods'],config['parameters']) 

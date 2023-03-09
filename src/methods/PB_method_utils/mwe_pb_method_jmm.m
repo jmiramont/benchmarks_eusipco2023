@@ -13,9 +13,9 @@ addpath(strcat([folder 'PseudoBay']));
 addpath(strcat([folder 'mfiles']));
 
 %% Import signal from file (from the SignalBank in python).
-load McDampedCos.mat
+% load McDampedCos.mat
 % load McCrossingChirps.mat
-% load McSyntheticMixture5.mat
+load McSyntheticMixture5.mat
 N = length(x); % The signal has 1024 samples.
 x = x.';
 Ncomp = double(Ncomp);
@@ -50,7 +50,7 @@ xn = sigmerge(x, noise, SNRin);
 
 
 %% Compute the QRF
-qrf = 20*log10(norm(x(100:end-100))/norm(x(100:end-100)-xr(100:end-100)));
+qrf = 20*log10(norm(x(100:end-100))/norm(x(100:end-100)-xr(100:end-100).'));
 
 %% Compare recovered signal and the original (denoised) one.
 figure();
