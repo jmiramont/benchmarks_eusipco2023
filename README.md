@@ -37,7 +37,7 @@ Additionally, the directory [```src/methods```](src/methods) contains several fo
   - [Size of outputs according to the task](#size-of-outputs-according-to-the-task)
 
 You can use the code in this repository to test a new method against others, which is based on the freely-available, Python-based, [benchmarking toolbox introduced here.](https://github.com/jmiramont/benchmark-test)
-You can clone this repository and benchmark your own method locally, i.e. in your computer. This will allow you to run the benchmarks with all the modifications you want (exploring different parameters for you method, type of signals, number of repetitions, etc.).
+You can clone this repository and benchmark your own method locally, i.e. in your computer. This will allow you to run the benchmarks with all the modifications you want (exploring different parameters, type of signals, number of repetitions, etc.).
 
 The [*notebooks*](./notebooks/) folder contains a number of minimal working examples to understand how this benchmark works and how you could use it for your project. In particular, [*demo_benchmark.ipynb*](./notebooks/demo_benchmark.ipynb) gives two minimal working examples to introduce the basic functionality of the `Benchmark` class, and the notebook [*demo_signal_bank.ipynb*](./notebooks/demo_signal_bank.ipynb) showcases the signals produced by the `SignalBank` class.
 
