@@ -55,7 +55,7 @@ We use [```poetry```](https://python-poetry.org/docs/), a tool for dependency ma
 In order to install the benchmarking tool, open a terminal in the directory where you clone the benchmark (or use the console in your preferred IDE). Then, make ```poetry``` create a virtual environment and install all the current dependencies of the benchmark using:
 
 ```bash
-poetry install 
+poetry install --extras "matlab_tools"
 ```
 
 *Remark for conda users:*
