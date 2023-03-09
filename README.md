@@ -55,8 +55,10 @@ We use [```poetry```](https://python-poetry.org/docs/), a tool for dependency ma
 In order to install the benchmarking tool, open a terminal in the directory where you clone the benchmark (or use the console in your preferred IDE). Then, make ```poetry``` create a virtual environment and install all the current dependencies of the benchmark using:
 
 ```bash
-poetry install --extras "matlab_tools"
+poetry install
 ```
+Benchmarking Matlab-implemented methods is possible thanks to the incorporated [Matlab's Python engine](https://fr.mathworks.com/help/matlab/matlab-engine-for-python.html), that allows communication between python and a Matlab's session. Matlab's Python engine is only compatible with certain Python versions, depending on the local Matlab installation you are running. [Check that your versions of matlab and Python are compatible](https://www.mathworks.com/content/dam/mathworks/mathworks-dot-com/support/sysreq/files/python-compatibility.pdf).
+
 
 *Remark for conda users:*
 
@@ -145,8 +147,6 @@ Finally, **you have to move the file** with all the modifications to the folder 
 
 ### Matlab-based method
 
-Benchmarking Matlab-implemented methods is possible thanks to the incorporated [Matlab's Python engine](https://fr.mathworks.com/help/matlab/matlab-engine-for-python.html), that allows communication between python and a Matlab's session.
-
 The Matlab function implementing your method must have a particular signature. For example, for a method with two input parameters should be:
 
 ```matlab
@@ -154,14 +154,6 @@ The Matlab function implementing your method must have a particular signature. F
 ```
 
 Your method can have all the (positional) input arguments you need. The ouput of the function must be a Matlab matrix of [predefined dimensions according to the task.](#size-of-outputs-according-to-the-task)
-
-Matlab's Python engine is only compatible with certain Python versions, depending on the local Matlab installation you are running. [Check that your versions of matlab and Python are compatible](https://www.mathworks.com/content/dam/mathworks/mathworks-dot-com/support/sysreq/files/python-compatibility.pdf).
-
-Once you've checked your Python and Matlab versions are compatible, you can install the matlab engine in the [virtual environment created before](#installation-using-poetry) using poetry
-
-```bash
-poetry install -E matlab_tools
-```
 
 We now can see how to benchmark a method implemented in Matlab. A template file is given [here](./new_method_example/method_new_basic_template_matlab.py) for interested users.
 
