@@ -273,7 +273,7 @@ Check the version of the ```matlabengine``` module you have to install to use ru
 
 | Matlab Version | Python Version | ```matlabengine``` version |   |
 |----------------|----------------|----------------------------|---|
-| 2022b          | 3.8, 3.9, 3.10 | 9.13.16                    |   |
+| 2022b          | 3.8, 3.9, 3.10 | 9.13.6                    |   |
 | 2022a          | 3.8, 3.9       | 9.12.17                    |   |
 | 2021b          | 3.7, 3.8, 3.9  | 9.11.19                    |   |
 
