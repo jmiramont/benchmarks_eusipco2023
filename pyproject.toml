@@ -4,7 +4,7 @@ name = "benchmark-demo"
 version = "0.1.0"
 description = "Benchmarks for testing MCS analysis methods."
 authors = ["Juan M. Miramont <jmiramont@univ-nantes.fr>"]
-packages = [{include = "src"},{include='src/benchmark_demo'}]
+packages = [{include = "src"},{include='benchmark_demo'}]
 
 # [virtualenvs]
 # # Create local virtualenv stored in .venv (Python version used depends on VSCode selected interpreter)
