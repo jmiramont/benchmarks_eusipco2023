@@ -876,12 +876,12 @@ files = [
 
 [[package]]
 name = "matlabengine"
-version = "9.13.6"
+version = "24.1.2"
 description = "A module to call MATLAB from Python"
 optional = false
-python-versions = ">=3.8, <3.11"
+python-versions = "<3.12,>=3.9"
 files = [
-    {file = "matlabengine-9.13.6.tar.gz", hash = "sha256:5f37713998cc9e5c9cbba3e80901d98ce5f5c6c795a7fdef30011406876894a9"},
+    {file = "matlabengine-24.1.2.tar.gz", hash = "sha256:dde548046dfc15a565acce9b24410fc0881769031b66d28f78463a1d09c67881"},
 ]
 
 [[package]]
@@ -1991,4 +1991,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9,<3.11"
-content-hash = "77393251580c7c2396461a38d0a56d5fd393476e5a075ecdcffd04eef76cb52f"
+content-hash = "08ef76f825cc4bb7c710d12b1978702bcb9e42c9770d6f61e289d3b58a91c94e"

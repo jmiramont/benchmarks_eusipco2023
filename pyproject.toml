@@ -4,7 +4,7 @@ name = "benchmark-demo"
 version = "0.1.0"
 description = "Benchmarks for testing MCS analysis methods."
 authors = ["Juan M. Miramont <jmiramont@univ-nantes.fr>"]
-packages = [{include = "src"}]
+packages = [{include = "src"},{include='src/benchmark_demo'}]
 
 # [virtualenvs]
 # # Create local virtualenv stored in .venv (Python version used depends on VSCode selected interpreter)
@@ -53,7 +53,7 @@ spatstat-interface = "^1.0.1"
 optional = true
 
 [tool.poetry.group.matlab_tools.dependencies]
-matlabengine = "9.13.6"
+matlabengine = "24.1.2" #"9.13.6"
 
 # Install Notebooks dependencies "poetry install --with notebooks"
 [tool.poetry.group.notebooks]

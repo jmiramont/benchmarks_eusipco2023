@@ -1,5 +1,7 @@
 from mcsm_benchs.benchmark_utils import MethodTemplate
 from mcsm_benchs.MatlabInterface import MatlabInterface
+import os
+
 # import sys
 # sys.path.append("methods")
 # You must import the MethodTemplate abstract class and the MatlabInterface class.
@@ -8,13 +10,9 @@ from mcsm_benchs.MatlabInterface import MatlabInterface
 # (without the .m extension). Then get the matlab function as:
 
 # Paths to additional code for the method to add to Matlab path variable.
-paths = ['src\methods\EM_method_utils',
-        '..\src\methods\EM_method_utils'
+paths = [   os.path.join('src','methods','EM_method_utils'),
+            os.path.join('..','src','methods','EM_method_utils')
         ]
-
-# paths = ['src\methods\EM_new',
-#         '..\src\methods\EM_new'
-#         ]
 
 mlint = MatlabInterface('em_method', add2path=paths, matlab_warnings=False) 
 matlab_function = mlint.matlab_function # A python function handler to the method.
