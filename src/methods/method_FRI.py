@@ -1,4 +1,6 @@
-from benchmark_demo.benchmark_utils import MethodTemplate, MatlabInterface
+from mcsm_benchs.benchmark_utils import MethodTemplate
+from mcsm_benchs.MatlabInterface import MatlabInterface
+
 # import sys
 # sys.path.append("methods")
 # You must import the MethodTemplate abstract class and the MatlabInterface class.

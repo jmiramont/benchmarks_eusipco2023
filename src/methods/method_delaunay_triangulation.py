@@ -1,5 +1,5 @@
-from benchmark_demo.benchmark_utils import MethodTemplate
-from benchmark_demo.utilstf import *
+from mcsm_benchs.benchmark_utils import MethodTemplate
+from src.benchmark_demo.utilstf import *
 from scipy.spatial import Delaunay
 import matplotlib.pyplot as plt
 # from benchmark_demo.spatstats_utils_old import compute_scale, ComputeStatistics
