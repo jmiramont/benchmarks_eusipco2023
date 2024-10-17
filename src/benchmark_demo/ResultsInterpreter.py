@@ -1,7 +1,7 @@
 # from sqlite3 import DatabaseError
 import pandas as pd
 import seaborn as sns
-from benchmark_demo.Benchmark import Benchmark
+from src.benchmark_demo.Benchmark import Benchmark
 import pickle
 import numpy as np
 from matplotlib import pyplot as plt, ticker as mticker
@@ -9,8 +9,8 @@ from mpl_toolkits.axes_grid1 import ImageGrid
 import matplotlib.gridspec as gridspec
 import string
 import os
-import plotly.express as px
-import plotly.io as pio
+# import plotly.express as px
+# import plotly.io as pio
 
 
 class ResultsInterpreter:

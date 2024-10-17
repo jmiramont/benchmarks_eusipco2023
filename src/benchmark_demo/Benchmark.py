@@ -1,6 +1,6 @@
 import numpy as np
-from benchmark_demo.SignalBank import SignalBank, Signal
-from benchmark_demo.perf_metrics import compare_qrf_block,compare_instf_block
+from src.benchmark_demo.SignalBank import SignalBank, Signal
+from src.benchmark_demo.perf_metrics import compare_qrf_block,compare_instf_block
 import pandas as pd
 import numbers
 import pickle
