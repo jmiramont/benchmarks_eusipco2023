@@ -22,9 +22,9 @@ matlab_function = mlint.matlab_function # A python function handler to the metho
 # Load parameters from configuration file.
 import yaml
 try:
-    with open('src\methods\config_tasks.yaml', "r") as f:
+    with open('config_benchmarks.yaml', "r") as f:
         config = yaml.load(f, Loader=yaml.FullLoader)
-    task =config['task']
+    task = config['task']
 except:
     task = 'denoising'
 
@@ -33,7 +33,6 @@ class NewMethod(MethodTemplate):
 
     def __init__(self):
         self.id = 'brevdo_method'
-        
         # self.task = 'denoising'
         # self.task = 'component_denoising'
         # self.task = 'inst_frequency'

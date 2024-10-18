@@ -988,7 +988,7 @@ tqdm = "^4.66.4"
 type = "git"
 url = "https://github.com/jmiramont/mcsm-benchs.git"
 reference = "dev"
-resolved_reference = "08f12442ba0276b8e7b328be3b227da2ce99196f"
+resolved_reference = "a18f764c57b22fe5af0c868bca24413aac61a81f"
 
 [[package]]
 name = "nest-asyncio"
