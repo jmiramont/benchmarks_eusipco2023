@@ -5,7 +5,7 @@ task : 'denoising'
 
 N: 1024
 SNRin: [-20,-10,0,10,20] #[-20,-15,-10,-5,0,5,10,15,20]
-repetitions: 5
+repetitions: 30
 parallelize: False
 verbosity: 0
 signal_ids: [
