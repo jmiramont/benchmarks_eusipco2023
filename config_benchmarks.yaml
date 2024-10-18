@@ -1,27 +1,20 @@
+# Select the tasks
+task : 'denoising'
+# task : 'component_denoising'
+# task : 'inst_frequency'
+
 N: 1024
 SNRin: [-20,-10,0,10,20] #[-20,-15,-10,-5,0,5,10,15,20]
 repetitions: 30
-parallelize: True
-verbosity: 4
-using_signals: [ #'LinearChirp','CosChirp',]      # Single-component signals
-#                #'ToneSharpAttack', ToneDumped,  # Dumped and Sharps attacks
+parallelize: False
+verbosity: 0
+signal_ids: [
                 'McDampedCos',
                 'McCrossingChirps',             # Crossing-components  
-                # 'McMultiLinear', 
-                # 'McMultiLinear2',             # Multi-Component signals  
-#                 'McMultiCos2',                # Multi-Component Non-Harmonic    
-                # 'McSyntheticMixture',
                 'McSyntheticMixture5',
-                # 'McSyntheticMixture2',
-                # 'McSyntheticMixture3',
-                # 'McSyntheticMixture4',
-                # 'HermiteFunction',            # Hermite type signals  
-                # 'McTripleImpulse',
-#                 #'McOnOffTones',
-                # 'McOnOff2'                    # Modes that born and die
               ]
 
 
 
 # Run again the same benchmark but only for new methods:
-add_new_methods: True
+add_new_methods: False

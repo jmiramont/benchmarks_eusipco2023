@@ -1,5 +1,5 @@
-from benchmark_demo.benchmark_utils import MethodTemplate
-from benchmark_demo.utilstf import *
+from mcsm_benchs.benchmark_utils import MethodTemplate
+from src.utilstf import *
 from scipy.spatial import Delaunay
 import matplotlib.pyplot as plt
 # from benchmark_demo.spatstats_utils_old import compute_scale, ComputeStatistics
@@ -378,9 +378,9 @@ def delaunay_triangulation_denoising(signal,
 # Load parameters from configuration file.
 import yaml
 try:
-    with open('src\methods\config_tasks.yaml', "r") as f:
+    with open('config_benchmarks.yaml', "r") as f:
         config = yaml.load(f, Loader=yaml.FullLoader)
-    task =config['task']
+    task = config['task']
 except:
     task = 'denoising'
 
@@ -388,14 +388,7 @@ except:
 class NewMethod(MethodTemplate):
     def __init__(self):
         self.id = 'delaunay_triangulation'
-        
-        # self.task = 'denoising'
-        # self.task = 'component_denoising'
-        # self.task = 'inst_frequency'
         self.task = task
-
-        # In case is needed...
-        # self.cs = ComputeStatistics()
 
     def method(self, signal, *args, **kwargs):
         if "ngroups" not in kwargs.keys():

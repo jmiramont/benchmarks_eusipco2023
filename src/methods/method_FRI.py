@@ -1,4 +1,8 @@
-from benchmark_demo.benchmark_utils import MethodTemplate, MatlabInterface
+from mcsm_benchs.benchmark_utils import MethodTemplate
+from mcsm_benchs.MatlabInterface import MatlabInterface
+
+import os
+
 # import sys
 # sys.path.append("methods")
 # You must import the MethodTemplate abstract class and the MatlabInterface class.
@@ -7,8 +11,8 @@ from benchmark_demo.benchmark_utils import MethodTemplate, MatlabInterface
 # (without the .m extension). Then get the matlab function as:
 
 # Paths to additional code for the method to add to Matlab path variable.
-paths = ['src\methods\FRI_method_utils',
-        '..\src\methods\FRI_method_utils'
+paths = [   os.path.join('src','methods','FRI_method_utils'),
+            os.path.join('..','src','methods','FRI_method_utils')
         ]
 
 mlint = MatlabInterface('fri_method', add2path=paths) 
@@ -18,9 +22,9 @@ matlab_function = mlint.matlab_function # A python function handler to the metho
 # Load parameters from configuration file.
 import yaml
 try:
-    with open('src\methods\config_tasks.yaml', "r") as f:
+    with open('config_benchmarks.yaml', "r") as f:
         config = yaml.load(f, Loader=yaml.FullLoader)
-    task =config['task']
+    task = config['task']
 except:
     task = 'denoising'
 
